@@ -33,5 +33,18 @@ public class ChatController {
         for (Map.Entry<Integer, IBot> entry : availableBots.entrySet()) {
             System.out.println(entry.getKey() + ") " + entry.getValue().getName());
         }
-    }    
+    }
+
+    public void processInput(String input) {
+        // Holt den aktivierten Bot (aktuell nur einer zur Zeit)
+        Map<Integer, IBot> activeBots = botManager.getActiveBots();
+        if (activeBots.isEmpty()) {
+            System.out.println("No bot is currently activated. Please activate a bot first.");
+            return;
+        }
+
+        // Aktuell den ersten aktiven Bot verwenden (bei Erweiterungen könnte hier eine Auswahl hinzukommen)
+        IBot activeBot = activeBots.values().iterator().next();
+        activeBot.processCommand(input);
+    }
 }

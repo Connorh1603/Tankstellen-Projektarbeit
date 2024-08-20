@@ -29,7 +29,8 @@ public class ConsoleView {
             } else if (command.equals("list bots")) {
                 controller.listAvailableBots();
             } else {
-                display("Unknown command.");
+                // Eingaben, die keine Bot-Kommandos sind, werden an den aktiven Bot weitergeleitet
+                controller.processInput(command);
             }
         }
     }
