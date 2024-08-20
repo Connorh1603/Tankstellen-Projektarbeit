@@ -9,11 +9,12 @@ public class WeatherBot implements IBot{
     }
 
     @Override
-    public void processCommand(String command) {
+    public boolean processCommand(String command) {
         if (command.equalsIgnoreCase("weather")) {
             System.out.println("The weather today is sunny.");
+            return true;
         } else {
-            System.out.println("Unknown command for WeatherBot.");
+            return false;
         }
     }
 }
