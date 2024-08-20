@@ -5,17 +5,21 @@ import java.util.Scanner;
 import Controller.ChatController;
 
 public class ConsoleView {
-    private ChatController controller;
 
-    public ConsoleView(ChatController controller) {
-        this.controller = controller;
+
+    public void display(String message) {
+        System.out.println(message);
     }
 
-    public void start() {
+    public String readInput() {
         Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+
+    public void run(ChatController controller) {
         while (true) {
             System.out.println("Enter command:");
-            String command = scanner.nextLine();
+            String command = readInput();
             if (command.startsWith("activate bot")) {
                 int botId = Integer.parseInt(command.split(" ")[2]);
                 controller.activateBot(botId);
@@ -25,7 +29,7 @@ public class ConsoleView {
             } else if (command.equals("list bots")) {
                 controller.listAvailableBots();
             } else {
-                System.out.println("Unknown command.");
+                display("Unknown command.");
             }
         }
     }
