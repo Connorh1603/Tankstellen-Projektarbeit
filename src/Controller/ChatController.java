@@ -31,7 +31,8 @@ public class ChatController {
         Map<Integer, IBot> availableBots = botManager.getAvailableBots();
         System.out.println("Available bots:");
         for (Map.Entry<Integer, IBot> entry : availableBots.entrySet()) {
-            System.out.println(entry.getKey() + ") " + entry.getValue().getName());
+            String status = botManager.getActiveBots().containsKey(entry.getKey()) ? "enabled" : "available";
+            System.out.println(entry.getKey() + ") " + entry.getValue().getName() + " (" + status + ")");
         }
     }
 
