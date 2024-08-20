@@ -15,6 +15,7 @@ public class App {
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
         controller.registerBot(2, new WikiBot());
+        controller.registerBot(3, new TranslationBot());
 
         // Verwenden des Adapters (aktuell für die Konsole)
         FrontendAdapter adapter = new FrontendAdapter(new ConsoleView());
