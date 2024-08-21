@@ -2,7 +2,6 @@ package bots;
 
 import Interfaces.IBot;
 import Services.TranslationService;
-import model.ListChecker;
 import model.Message;
 
 /**
@@ -30,12 +29,6 @@ public class TranslationBot implements IBot {
                 return "Usage: @translatebot <target_language_code> <text>";
             }
         }
-
-        // Variante B: Interaktive Konversation mit dem Bot
-        if (isActiveConversation || command.equals("@translatebot")) {
-            return handleInteractiveTranslation(command);
-        }
-
         return null;
     }
 
@@ -56,45 +49,6 @@ public class TranslationBot implements IBot {
 
             // Text übersetzen und Ergebnis zurückgeben
             String translatedText = translate(textToTranslate, targetLang);
-            return "Translation: " + translatedText;
-
-        } catch (Exception e) {
-            return "Error processing command: " + e.getMessage();
-        }
-    }
-
-    /**
-     * Behandelt die interaktive Konversation für Übersetzungen:
-     * - Der Bot fragt nach der Zielsprache
-     * - Der Bot fragt nach dem zu übersetzenden Text
-     * - Der Bot gibt die Übersetzung aus
-     */
-    private String handleInteractiveTranslation(String command) {
-        if (!isActiveConversation) {
-            // Bot aktiviert, Benutzer wird nach der Zielsprache gefragt
-            isActiveConversation = true;
-            return "In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:\n    - [EN]glisch\n    - [DE]utsch";
-            // Weitere Sprachen können hinzugefügt werden
-        }
-
-        if (targetLanguage.isEmpty()) {
-            // Ziel-Sprache setzen
-            targetLanguage = command.toUpperCase();
-            return "Bitte den zu übersetzenden Text eingeben:";
-        }
-
-        if (command.equalsIgnoreCase("quit")) {
-            // Konversation beenden
-            isActiveConversation = false;
-            targetLanguage = "";
-            return "Bye!";
-        }
-
-        try {
-            // Text übersetzen und Ergebnis zurückgeben
-            String translatedText = translate(command, targetLanguage);
-            isActiveConversation = false; // Konversation nach der Übersetzung beenden
-            targetLanguage = "";
             return "Translation: " + translatedText;
 
         } catch (Exception e) {
