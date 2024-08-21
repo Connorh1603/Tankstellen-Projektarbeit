@@ -1,14 +1,12 @@
 package bots;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 import Interfaces.IBot;
 import Services.CurrentWeatherService;
 import Services.WeatherForecastService;
+import model.ListChecker;
+
 
 public class WeatherBot implements IBot{
     
@@ -27,13 +25,14 @@ public class WeatherBot implements IBot{
 
     @Override
     public boolean processCommand(String command) {
-        command.toLowerCase();
+        ListChecker cityCheck=new ListChecker("src/documents/Staette.CSV");
+        command=command.toLowerCase();
         if (command.contains(" wetter ")) {
             if (command.contains(" ist ")) {
-                String weatherInfo = currentWeatherService.getWeatherInfo("Bielefeld");
+                String weatherInfo = currentWeatherService.getWeatherInfo(cityCheck.findCityInText(command));
                 System.out.println(weatherInfo);
             } else if (command.contains(" wird ")) {
-                String forecastInfo = weatherForecastService.getForecastInfo("Bielefeld");
+                String forecastInfo = weatherForecastService.getForecastInfo(cityCheck.findCityInText(command));
                 System.out.println(forecastInfo);
             }
             return true;
@@ -42,4 +41,5 @@ public class WeatherBot implements IBot{
             return false;
         }
     }
+
 }
