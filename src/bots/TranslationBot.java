@@ -12,6 +12,7 @@ public class TranslationBot implements IBot {
     private final String name = "TranslationBot";
     private boolean isActiveConversation = false; // Für Variante B
     private String targetLanguage = "";
+    private String pendingTextToTranslate = ""; // Für die Verarbeitung des Textes in Variante A
 
     private final String apiKey = "21947c34-929d-ad82-932b-5747f7ba2f31:fx";  // Der API-Schlüssel von DeepL
 
@@ -23,8 +24,12 @@ public class TranslationBot implements IBot {
     @Override
     public boolean processCommand(String command) {
         // Variante A: Direktansprache
-        if (command.startsWith("@translatebot ")) {
-            handleDirectTranslation(command.substring(14).trim());
+        if (command.startsWith("@translatebot")) {
+            if (command.length() > 13) { // Sicherstellen, dass die Eingabe lang genug ist
+                handleDirectTranslation(command.substring(13).trim());
+            } else {
+                System.out.println("Usage: @translatebot <target_language_code> <text>");
+            }
             return true;
         }
 
@@ -34,7 +39,25 @@ public class TranslationBot implements IBot {
             return true;
         }
 
+        // Prüfen auf "translate" oder "übersetze" im Satz und Sprachcode
+        if (command.startsWith("translate") || command.startsWith("übersetze")) {
+            String textToTranslate = command.substring(command.indexOf(" ") + 1).trim();
+            initiateTranslationFlow(textToTranslate);
+            return true;
+        }
+
         return false;
+    }
+
+    private void initiateTranslationFlow(String textToTranslate) {
+        if (!isActiveConversation) {
+            isActiveConversation = true;
+            pendingTextToTranslate = textToTranslate; // Speichern des zu übersetzenden Textes
+            System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
+            System.out.println("    - [EN]glisch");
+            System.out.println("    - [DE]utsch");
+            // Weitere Sprachen können hinzugefügt werden
+        }
     }
 
     private void handleDirectTranslation(String input) {
@@ -62,7 +85,6 @@ public class TranslationBot implements IBot {
             System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
             System.out.println("    - [EN]glisch");
             System.out.println("    - [DE]utsch");
-            // Weitere Sprachen können hinzugefügt werden
             return;
         }
 
@@ -115,8 +137,13 @@ public class TranslationBot implements IBot {
 
         // Parsing der JSON-Antwort, um den übersetzten Text zu extrahieren
         String result = response.toString();
+
         int start = result.indexOf("\"text\":\"") + 8;
-        int end = result.indexOf("\"}]", start);
-        return result.substring(start, end).replace("\\", "");
+        int end = result.indexOf("\"}", start);
+        if (start > 8 && end > start) { // Sicherstellen, dass Start- und End-Index korrekt sind
+            return result.substring(start, end).replace("\\", "");
+        } else {
+            throw new Exception("Invalid API response format.");
+        }
     }
 }
