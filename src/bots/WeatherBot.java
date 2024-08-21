@@ -1,44 +1,61 @@
 package bots;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 import Interfaces.IBot;
 
 public class WeatherBot implements IBot{
+    
+    private static final String API_KEY = "0cd9fbf88f2bc8c631d2b0d5d7c528b5";
+    private static final String CITY = "Bielefeld";
+    private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather?q=" + CITY + "&appid=" + API_KEY;
+
     @Override
     public String getName() {
         return "WeatherBot";
     }
 
+
     @Override
     public boolean processCommand(String command) {
-        // Pattern to match "weather" with an optional city before or after
-        Pattern pattern = Pattern.compile("(.*\\b)?weather(\\b.*)?", Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(command.trim());
-
-        if (matcher.matches()) {
-            String beforeWeather = matcher.group(1);
-            String afterWeather = matcher.group(2);
-            String city = "";
-
-            // Check if there is a city name before or after the word "weather"
-            if (beforeWeather != null && !beforeWeather.trim().isEmpty()) {
-                city = beforeWeather.trim();
-            } else if (afterWeather != null && !afterWeather.trim().isEmpty()) {
-                city = afterWeather.trim();
-            }
-
-            // If a city is detected, display it
-            if (!city.isEmpty()) {
-                System.out.println("The weather in " + city + " today is sunny.");
-            } else {
-                System.out.println("The weather today is sunny.");
-            }
-
+        if (command.equalsIgnoreCase("weather")) {
+            String weatherInfo = getWeatherInfo();
+            System.out.println(weatherInfo);
             return true;
         } else {
             return false;
+        }
+    }
+
+    private String getWeatherInfo() {
+        try {
+            URL url = new URL(API_URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // Hier kannst du die Antwort verarbeiten und spezifische Wetterinformationen extrahieren
+                return "Weather Info: " + response.toString();
+            } else {
+                return "Failed to get weather information. Response Code: " + responseCode;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "An error occurred while fetching the weather information.";
         }
     }
 }
