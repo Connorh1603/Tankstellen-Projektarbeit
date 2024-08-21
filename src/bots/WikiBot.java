@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 public class WikiBot implements IBot {
 
@@ -25,8 +27,16 @@ public class WikiBot implements IBot {
         // Extrahiere den Suchbegriff nach "@wiki"
         String searchTerm = command.substring(command.toLowerCase().indexOf("@wiki") + "@wiki".length()).trim();
 
+        // Kodieren des Suchbegriffs für die URL
+        String encodedSearchTerm;
+        try {
+            encodedSearchTerm = URLEncoder.encode(searchTerm, StandardCharsets.UTF_8.toString());
+        } catch (Exception e) {
+            return "Fehler bei der Kodierung des Suchbegriffs.";
+        }
+
         // Holen der Zusammenfassung von Wikipedia
-        String result = fetchWikiSummary(searchTerm);
+        String result = fetchWikiSummary(encodedSearchTerm);
         if (result != null && !result.isEmpty()) {
             return "Folgende Information habe ich zu " + searchTerm + ":\n" + result;
         } else {
