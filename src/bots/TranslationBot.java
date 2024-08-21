@@ -2,6 +2,7 @@ package bots;
 
 import Interfaces.IBot;
 import Services.TranslationService;
+import model.ListChecker;
 
 /**
  * Bot für Übersetzungen, der den TranslationService zur Durchführung von Übersetzungen verwendet.
@@ -22,9 +23,9 @@ public class TranslationBot implements IBot {
     @Override
     public boolean processCommand(String command) {
         // Variante A: Direktansprache des Bots
-        if (command.startsWith("@translatebot ")) {
-            if (command.length() > 14) { // Sicherstellen, dass die Eingabe genügend Länge hat
-                handleDirectTranslation(command.substring(14).trim());
+        if (command.startsWith("@translatebot")) {
+            if (command.length() > 13) { // Sicherstellen, dass die Eingabe genügend Länge hat
+                handleDirectTranslation(command.substring(13).trim());
             } else {
                 System.out.println("Usage: @translatebot <target_language_code> <text>");
             }
