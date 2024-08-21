@@ -6,6 +6,7 @@ import bots.WeatherBot;
 import bots.WikiBot;
 import view.ConsoleView;
 import view.FrontendAdapter;
+import Interfaces.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -15,10 +16,12 @@ public class App {
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
         controller.registerBot(2, new WikiBot());
-        controller.registerBot(3, new TranslationBot());
+        controller.registerBot(2, new TranslationBot());
+        // Benutzername festlegen
+        String user = "User123";
 
-        // Verwenden des Adapters (aktuell für die Konsole)
-        FrontendAdapter adapter = new FrontendAdapter(new ConsoleView());
-        adapter.start(controller);
+        // Verwenden des FrontendAdapters (aktuell für die Konsole)
+        IFrontend frontend = new FrontendAdapter(new ConsoleView());
+        frontend.start(controller, user);
     }
 }

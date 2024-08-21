@@ -1,15 +1,20 @@
 package Controller;
 
-import java.util.Map;
-
-import Interfaces.IBot;
+import model.Message;
 import model.BotManager;
+import Interfaces.IBot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ChatController {
     private BotManager botManager;
+    private List<Message> messageHistory;
 
     public ChatController() {
         this.botManager = new BotManager();
+        this.messageHistory = new ArrayList<>();
     }
 
     public void registerBot(int id, IBot bot) {
@@ -31,12 +36,16 @@ public class ChatController {
         Map<Integer, IBot> availableBots = botManager.getAvailableBots();
         System.out.println("Available bots:");
         for (Map.Entry<Integer, IBot> entry : availableBots.entrySet()) {
-            String status = botManager.getActiveBots().containsKey(entry.getKey()) ? "enabled" : "available";
-            System.out.println(entry.getKey() + ") " + entry.getValue().getName() + " (" + status + ")");
+            System.out.println(entry.getKey() + ") " + entry.getValue().getName());
         }
     }
 
-    public void processInput(String input) {
+    public void processInput(String input, String user) {
+        // Speichere die Benutzereingabe als Nachricht
+        Message userMessage = new Message(user, input);
+        messageHistory.add(userMessage);
+        System.out.println("User: " + userMessage.getContent());
+
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
         if (activeBots.isEmpty()) {
             System.out.println("No bot is currently activated. Please activate a bot first.");
@@ -48,11 +57,18 @@ public class ChatController {
         for (IBot bot : activeBots.values()) {
             if (bot.processCommand(input)) {
                 commandProcessed = true;
+                // Speichere die Bot-Antwort als Nachricht
+                Message botMessage = new Message(bot.getName(), input);
+                messageHistory.add(botMessage);
             }
         }
 
         if (!commandProcessed) {
             System.out.println("No bot recognized the command.");
         }
+    }
+
+    public List<Message> getMessageHistory() {
+        return messageHistory;
     }
 }
