@@ -7,11 +7,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TranslationBot implements IBot {
     private final String name = "TranslationBot";
     private boolean isActiveConversation = false; // Für Variante B
     private String targetLanguage = "";
+    private String pendingTextToTranslate = ""; // Für den neuen translate Befehl
 
     private final String apiKey = "21947c34-929d-ad82-932b-5747f7ba2f31:fx";  // Der API-Schlüssel von DeepL
 
@@ -28,6 +31,36 @@ public class TranslationBot implements IBot {
             return true;
         }
 
+        // Neue Bedingung: Reaktion auf "translate {text}" oder "übersetze {text}"
+        if (command.startsWith("translate ") || command.startsWith("übersetze ")) {
+            String textToTranslate = command.substring(command.indexOf(" ") + 1).trim();
+            initiateTranslationFlow(textToTranslate);
+            return true;
+        }
+
+        // Prüfen auf "translate" oder "übersetze" im Satz und Sprachcode
+        if (textContainsTranslationCommand(command)) {
+            String[] parts = extractTextAndLanguage(command);
+            if (parts[0] != null) {
+                pendingTextToTranslate = parts[0];
+                if (parts[1] != null) {
+                    targetLanguage = parts[1];
+                    try {
+                        String translatedText = translate(pendingTextToTranslate, targetLanguage);
+                        System.out.println("Translation: " + translatedText);
+                        isActiveConversation = false;
+                        pendingTextToTranslate = "";
+                        targetLanguage = "";
+                    } catch (Exception e) {
+                        System.out.println("Error processing command: " + e.getMessage());
+                    }
+                } else {
+                    initiateTranslationFlow(pendingTextToTranslate);
+                }
+            }
+            return true;
+        }
+
         // Variante B: Aktivierung des Bots und schrittweise Interaktion
         if (isActiveConversation || command.equals("@translatebot")) {
             handleInteractiveTranslation(command);
@@ -35,6 +68,17 @@ public class TranslationBot implements IBot {
         }
 
         return false;
+    }
+
+    private void initiateTranslationFlow(String textToTranslate) {
+        if (!isActiveConversation) {
+            isActiveConversation = true;
+            pendingTextToTranslate = textToTranslate; // Speichern des zu übersetzenden Textes
+            System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
+            System.out.println("    - [EN]glisch");
+            System.out.println("    - [DE]utsch");
+            // Weitere Sprachen können hinzugefügt werden
+        }
     }
 
     private void handleDirectTranslation(String input) {
@@ -62,19 +106,32 @@ public class TranslationBot implements IBot {
             System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
             System.out.println("    - [EN]glisch");
             System.out.println("    - [DE]utsch");
-            // Weitere Sprachen können hinzugefügt werden
             return;
         }
 
         if (targetLanguage.isEmpty()) {
             targetLanguage = command.toUpperCase();
-            System.out.println("Bitte den zu übersetzenden Text eingeben:");
+            if (!pendingTextToTranslate.isEmpty()) {
+                try {
+                    String translatedText = translate(pendingTextToTranslate, targetLanguage);
+                    System.out.println("Translation: " + translatedText);
+                } catch (Exception e) {
+                    System.out.println("Error processing command: " + e.getMessage());
+                } finally {
+                    isActiveConversation = false;
+                    pendingTextToTranslate = "";
+                    targetLanguage = "";
+                }
+            } else {
+                System.out.println("Bitte den zu übersetzenden Text eingeben:");
+            }
             return;
         }
 
         if (command.equalsIgnoreCase("quit")) {
             System.out.println("Bye!");
             isActiveConversation = false;
+            pendingTextToTranslate = "";
             targetLanguage = "";
             return;
         }
@@ -82,12 +139,36 @@ public class TranslationBot implements IBot {
         try {
             String translatedText = translate(command, targetLanguage);
             System.out.println("Translation: " + translatedText);
-            isActiveConversation = false; // Beenden der Konversation nach der Übersetzung
+            isActiveConversation = false;
+            pendingTextToTranslate = "";
             targetLanguage = "";
 
         } catch (Exception e) {
             System.out.println("Error processing command: " + e.getMessage());
         }
+    }
+
+    private boolean textContainsTranslationCommand(String text) {
+        return text.contains("translate") || text.contains("übersetze");
+    }
+
+    private String[] extractTextAndLanguage(String text) {
+        // Muster für Sprachcodes wie [EN], [DE], etc.
+        Pattern langPattern = Pattern.compile("\\b(EN|DE|FR|ES|IT)\\b", Pattern.CASE_INSENSITIVE);
+        Matcher langMatcher = langPattern.matcher(text);
+
+        // Extrahiere Sprachcode, falls vorhanden
+        String languageCode = null;
+        if (langMatcher.find()) {
+            languageCode = langMatcher.group(1).toUpperCase();
+            text = text.replaceAll("\\b" + languageCode + "\\b", "").trim(); // Entfernen des Sprachcodes aus dem Text
+        }
+
+        // Text nach dem Sprachcode
+        String[] result = new String[2];
+        result[0] = text.isEmpty() ? null : text;
+        result[1] = languageCode;
+        return result;
     }
 
     private String translate(String text, String targetLang) throws Exception {
