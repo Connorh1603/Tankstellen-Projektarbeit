@@ -27,15 +27,18 @@ public class WeatherBot implements IBot{
 
     @Override
     public boolean processCommand(String command) {
-        if (command.equalsIgnoreCase("weather")) {
-            String weatherInfo = currentWeatherService.getWeatherInfo("Bielefeld");
-            System.out.println(weatherInfo);
+        command.toLowerCase();
+        if (command.contains(" wetter ")) {
+            if (command.contains(" ist ")) {
+                String weatherInfo = currentWeatherService.getWeatherInfo("Bielefeld");
+                System.out.println(weatherInfo);
+            } else if (command.contains(" wird ")) {
+                String forecastInfo = weatherForecastService.getForecastInfo("Bielefeld");
+                System.out.println(forecastInfo);
+            }
             return true;
-        } else if (command.equalsIgnoreCase("forecast")) {
-            String forecastInfo = weatherForecastService.getForecastInfo("Bielefeld");
-            System.out.println(forecastInfo);
-            return true;
-        } else {
+        }
+        else   {
             return false;
         }
     }
