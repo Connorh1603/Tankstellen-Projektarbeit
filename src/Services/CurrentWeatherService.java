@@ -1,5 +1,6 @@
 package Services;
 
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -19,16 +20,29 @@ public class CurrentWeatherService {
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
                 StringBuilder response = new StringBuilder();
+                String inputLine;
 
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
                 in.close();
 
-                // Hier kannst du die Antwort verarbeiten und spezifische Wetterinformationen extrahieren
-                return "Current Weather Info: " + response.toString();
+                // JSON-Antwort parsen und relevante Informationen extrahieren
+                JSONObject jsonResponse = new JSONObject(response.toString());
+                JSONObject main = jsonResponse.getJSONObject("main");
+                JSONObject wind = jsonResponse.getJSONObject("wind");
+                String weatherDescription = jsonResponse.getJSONArray("weather").getJSONObject(0).getString("description");
+
+                return String.format(
+                        "Current Weather in %s:\nTemperature: %.2f°C\nFeels Like: %.2f°C\nHumidity: %d%%\nDescription: %s\nWind Speed: %.2f m/s",
+                        city,
+                        main.getDouble("temp") - 273.15,
+                        main.getDouble("feels_like") - 273.15,
+                        main.getInt("humidity"),
+                        weatherDescription,
+                        wind.getDouble("speed")
+                );
             } else {
                 return "Failed to get weather information. Response Code: " + responseCode;
             }
