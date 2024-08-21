@@ -2,7 +2,6 @@ package bots;
 
 import Interfaces.IBot;
 import Services.TranslationService;
-import model.Message;
 
 /**
  * Bot für Übersetzungen, der den TranslationService zur Durchführung von Übersetzungen verwendet.
