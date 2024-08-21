@@ -32,7 +32,7 @@ public class WikiBot implements IBot {
         } else {
             System.out.println("Keine Informationen gefunden.");
         }
-        return true; // Rückgabe true, da der Befehl verarbeitet wurde
+        return true; // Rückgabe true, wenn der Befehl verarbeitet wurde
     }
 
     private String fetchWikiSummary(String searchTerm) {
