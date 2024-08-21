@@ -18,17 +18,21 @@ public class WikiBot implements IBot {
 
     @Override
     public boolean processCommand(String command) {
-        if (command != null && command.toLowerCase().contains("wiki")) {
-            String searchTerm = command.replaceFirst("(?i)@wiki", "").trim();
-            String result = fetchWikiSummary(searchTerm);
-            if (result != null) {
-                System.out.println("Folgende Information habe ich zu " + searchTerm + ":\n" + result);
-            } else {
-                System.out.println("Keine Informationen gefunden.");
-            }
-            return true;
+        if (command == null || !command.toLowerCase().contains("@wiki")) {
+            return false; // Befehl enthält nicht @wiki, also keine Verarbeitung
         }
-        return false;
+
+        // Extrahiere den Suchbegriff nach "@wiki"
+        String searchTerm = command.substring(command.toLowerCase().indexOf("@wiki") + "@wiki".length()).trim();
+
+        // Holen der Zusammenfassung von Wikipedia
+        String result = fetchWikiSummary(searchTerm);
+        if (result != null && !result.isEmpty()) {
+            System.out.println("Folgende Information habe ich zu " + searchTerm + ":\n" + result);
+        } else {
+            System.out.println("Keine Informationen gefunden.");
+        }
+        return true; // Rückgabe true, da der Befehl verarbeitet wurde
     }
 
     private String fetchWikiSummary(String searchTerm) {
