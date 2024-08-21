@@ -17,9 +17,9 @@ public class WikiBot implements IBot {
     }
 
     @Override
-    public boolean processCommand(String command) {
+    public String processCommand(String command) {
         if (command == null || !command.toLowerCase().contains("@wiki")) {
-            return false; // Befehl enthält nicht @wiki, also keine Verarbeitung
+            return "Ungültiger Befehl. Bitte verwenden Sie das Format '@wiki [Suchbegriff]'.";
         }
 
         // Extrahiere den Suchbegriff nach "@wiki"
@@ -28,11 +28,10 @@ public class WikiBot implements IBot {
         // Holen der Zusammenfassung von Wikipedia
         String result = fetchWikiSummary(searchTerm);
         if (result != null && !result.isEmpty()) {
-            System.out.println("Folgende Information habe ich zu " + searchTerm + ":\n" + result);
+            return "Folgende Information habe ich zu " + searchTerm + ":\n" + result;
         } else {
-            System.out.println("Keine Informationen gefunden.");
+            return "Keine Informationen gefunden zu " + searchTerm + ".";
         }
-        return true; // Rückgabe true, wenn der Befehl verarbeitet wurde
     }
 
     private String fetchWikiSummary(String searchTerm) {
@@ -43,7 +42,7 @@ public class WikiBot implements IBot {
             conn.setRequestProperty("Accept", "application/json");
 
             if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+                return null; // Kein Inhalt bei Fehler
             }
 
             try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
@@ -57,10 +56,9 @@ public class WikiBot implements IBot {
                 conn.disconnect();
             }
         } catch (Exception e) {
-            System.err.println("Error fetching wiki summary: " + e.getMessage());
             e.printStackTrace();
+            return null; // Kein Inhalt bei Fehler
         }
-        return null;
     }
 
     private String buildWikiApiUrl(String searchTerm) {
@@ -72,7 +70,7 @@ public class WikiBot implements IBot {
         JSONArray pages = rootNode.optJSONArray("pages");
 
         if (pages == null || pages.length() == 0) {
-            return "Keine Ergebnisse gefunden.";
+            return null; // Keine Ergebnisse gefunden
         }
 
         StringBuilder summary = new StringBuilder();
