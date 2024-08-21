@@ -1,20 +1,18 @@
 package bots;
 
 import Interfaces.IBot;
-import java.io.OutputStreamWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import Services.TranslationService;
 
+/**
+ * Bot für Übersetzungen, der den TranslationService zur Durchführung von Übersetzungen verwendet.
+ */
 public class TranslationBot implements IBot {
-    private final String name = "TranslationBot";
-    private boolean isActiveConversation = false; // Für Variante B
-    private String targetLanguage = "";
-    private String pendingTextToTranslate = ""; // Für die Verarbeitung des Textes in Variante A
+    private final String name = "TranslationBot"; // Name des Bots
+    private boolean isActiveConversation = false; // Zeigt an, ob der Bot aktiv ist und auf Eingaben wartet
+    private String targetLanguage = ""; // Ziel-Sprache für die Übersetzung
+    private String pendingTextToTranslate = ""; // Text, der übersetzt werden soll
 
-    private final String apiKey = "21947c34-929d-ad82-932b-5747f7ba2f31:fx";  // Der API-Schlüssel von DeepL
+    private final TranslationService translationService = TranslationService.getInstance(); // Instanz des TranslationService
 
     @Override
     public String getName() {
@@ -23,43 +21,29 @@ public class TranslationBot implements IBot {
 
     @Override
     public boolean processCommand(String command) {
-        // Variante A: Direktansprache
-        if (command.startsWith("@translatebot")) {
-            if (command.length() > 13) { // Sicherstellen, dass die Eingabe lang genug ist
-                handleDirectTranslation(command.substring(13).trim());
+        // Variante A: Direktansprache des Bots
+        if (command.startsWith("@translatebot ")) {
+            if (command.length() > 14) { // Sicherstellen, dass die Eingabe genügend Länge hat
+                handleDirectTranslation(command.substring(14).trim());
             } else {
                 System.out.println("Usage: @translatebot <target_language_code> <text>");
             }
             return true;
         }
 
-        // Variante B: Aktivierung des Bots und schrittweise Interaktion
+        // Variante B: Interaktive Konversation mit dem Bot
         if (isActiveConversation || command.equals("@translatebot")) {
             handleInteractiveTranslation(command);
-            return true;
-        }
-
-        // Prüfen auf "translate" oder "übersetze" im Satz und Sprachcode
-        if (command.startsWith("translate") || command.startsWith("übersetze")) {
-            String textToTranslate = command.substring(command.indexOf(" ") + 1).trim();
-            initiateTranslationFlow(textToTranslate);
             return true;
         }
 
         return false;
     }
 
-    private void initiateTranslationFlow(String textToTranslate) {
-        if (!isActiveConversation) {
-            isActiveConversation = true;
-            pendingTextToTranslate = textToTranslate; // Speichern des zu übersetzenden Textes
-            System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
-            System.out.println("    - [EN]glisch");
-            System.out.println("    - [DE]utsch");
-            // Weitere Sprachen können hinzugefügt werden
-        }
-    }
-
+    /**
+     * Behandelt die direkte Übersetzungsanfrage im Format:
+     * @translatebot <target_language_code> <text>
+     */
     private void handleDirectTranslation(String input) {
         try {
             String[] parts = input.split(" ", 2);
@@ -68,9 +52,11 @@ public class TranslationBot implements IBot {
                 return;
             }
 
+            // Ziel-Sprache und Text extrahieren
             String targetLang = parts[0].toUpperCase();
             String textToTranslate = parts[1];
 
+            // Text übersetzen und ausgeben
             String translatedText = translate(textToTranslate, targetLang);
             System.out.println("Translation: " + translatedText);
 
@@ -79,22 +65,32 @@ public class TranslationBot implements IBot {
         }
     }
 
+    /**
+     * Behandelt die interaktive Konversation für Übersetzungen:
+     * - Der Bot fragt nach der Zielsprache
+     * - Der Bot fragt nach dem zu übersetzenden Text
+     * - Der Bot gibt die Übersetzung aus
+     */
     private void handleInteractiveTranslation(String command) {
         if (!isActiveConversation) {
+            // Bot aktiviert, Benutzer wird nach der Zielsprache gefragt
             isActiveConversation = true;
             System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
             System.out.println("    - [EN]glisch");
             System.out.println("    - [DE]utsch");
+            // Weitere Sprachen können hinzugefügt werden
             return;
         }
 
         if (targetLanguage.isEmpty()) {
+            // Ziel-Sprache setzen
             targetLanguage = command.toUpperCase();
             System.out.println("Bitte den zu übersetzenden Text eingeben:");
             return;
         }
 
         if (command.equalsIgnoreCase("quit")) {
+            // Konversation beenden
             System.out.println("Bye!");
             isActiveConversation = false;
             targetLanguage = "";
@@ -102,9 +98,10 @@ public class TranslationBot implements IBot {
         }
 
         try {
+            // Text übersetzen und ausgeben
             String translatedText = translate(command, targetLanguage);
             System.out.println("Translation: " + translatedText);
-            isActiveConversation = false; // Beenden der Konversation nach der Übersetzung
+            isActiveConversation = false; // Konversation nach der Übersetzung beenden
             targetLanguage = "";
 
         } catch (Exception e) {
@@ -112,38 +109,16 @@ public class TranslationBot implements IBot {
         }
     }
 
+    /**
+     * Führt die Übersetzung durch, indem es den TranslationService verwendet.
+     *
+     * @param text Der zu übersetzende Text.
+     * @param targetLang Der Ziel-Sprachcode (z.B. "EN" oder "DE").
+     * @return Der übersetzte Text.
+     * @throws Exception Bei Fehlern während der Übersetzung.
+     */
     private String translate(String text, String targetLang) throws Exception {
-        String urlStr = "https://api-free.deepl.com/v2/translate";
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Authorization", "DeepL-Auth-Key " + apiKey);
-        conn.setDoOutput(true);
-
-        String postData = "text=" + URLEncoder.encode(text, "UTF-8") +
-                "&target_lang=" + URLEncoder.encode(targetLang, "UTF-8");
-
-        OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-        writer.write(postData);
-        writer.flush();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            response.append(line);
-        }
-        reader.close();
-
-        // Parsing der JSON-Antwort, um den übersetzten Text zu extrahieren
-        String result = response.toString();
-
-        int start = result.indexOf("\"text\":\"") + 8;
-        int end = result.indexOf("\"}", start);
-        if (start > 8 && end > start) { // Sicherstellen, dass Start- und End-Index korrekt sind
-            return result.substring(start, end).replace("\\", "");
-        } else {
-            throw new Exception("Invalid API response format.");
-        }
+        // Verwenden Sie den TranslationService zur Durchführung der Übersetzung
+        return translationService.translate(text, targetLang);
     }
 }
