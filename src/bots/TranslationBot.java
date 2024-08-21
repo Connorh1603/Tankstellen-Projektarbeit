@@ -111,7 +111,6 @@ public class TranslationBot implements IBot {
     }
 
     /**
-     * Führt die Übersetzung durch, indem es den TranslationService verwendet.
      *
      * @param text Der zu übersetzende Text.
      * @param targetLang Der Ziel-Sprachcode (z.B. "EN" oder "DE").
