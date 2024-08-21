@@ -143,7 +143,7 @@ public class TranslationBot implements IBot {
         if (start > 8 && end > start) { // Sicherstellen, dass Start- und End-Index korrekt sind
             return result.substring(start, end).replace("\\", "");
         } else {
-            throw new Exception("Invalid API response format");
+            throw new Exception("Invalid API response format.");
         }
     }
 }
