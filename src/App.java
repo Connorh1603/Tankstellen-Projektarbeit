@@ -16,7 +16,7 @@ public class App {
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
         controller.registerBot(2, new WikiBot());
-        controller.registerBot(2, new TranslationBot());
+        controller.registerBot(3, new TranslationBot());
         // Benutzername festlegen
         String user = "User123";
 

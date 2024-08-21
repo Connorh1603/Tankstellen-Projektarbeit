@@ -6,6 +6,7 @@ import Interfaces.IBot;
 import Services.CurrentWeatherService;
 import Services.WeatherForecastService;
 import model.ListChecker;
+import model.Message;
 
 
 public class WeatherBot implements IBot{
@@ -24,21 +25,21 @@ public class WeatherBot implements IBot{
     }
 
     @Override
-    public boolean processCommand(String command) {
+    public String processCommand(String command) {
         ListChecker cityCheck=new ListChecker("src/documents/Staette.CSV");
         command=command.toLowerCase();
         if (command.contains(" wetter ")) {
             if (command.contains(" ist ")) {
                 String weatherInfo = currentWeatherService.getWeatherInfo(cityCheck.findCityInText(command));
-                System.out.println(weatherInfo);
+                return weatherInfo;
             } else if (command.contains(" wird ")) {
                 String forecastInfo = weatherForecastService.getForecastInfo(cityCheck.findCityInText(command));
-                System.out.println(forecastInfo);
+                return forecastInfo;
             }
-            return true;
+            return "No Information about the time given";
         }
         else   {
-            return false;
+            return null;
         }
     }
 

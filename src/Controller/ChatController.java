@@ -44,7 +44,6 @@ public class ChatController {
         // Speichere die Benutzereingabe als Nachricht
         Message userMessage = new Message(user, input);
         messageHistory.add(userMessage);
-        System.out.println("User: " + userMessage.getContent());
 
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
         if (activeBots.isEmpty()) {
@@ -55,11 +54,13 @@ public class ChatController {
         boolean commandProcessed = false;
 
         for (IBot bot : activeBots.values()) {
-            if (bot.processCommand(input)) {
+            String output=bot.processCommand(input);
+            if (output != null) {
                 commandProcessed = true;
                 // Speichere die Bot-Antwort als Nachricht
-                Message botMessage = new Message(bot.getName(), input);
+                Message botMessage = new Message(bot.getName(),output);
                 messageHistory.add(botMessage);
+                System.out.println(output);
             }
         }
 

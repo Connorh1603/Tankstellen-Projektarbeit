@@ -1,6 +1,8 @@
 package Interfaces;
 
+import model.Message;
+
 public interface IBot {
     String getName();
-    boolean processCommand(String command);
+    String processCommand(String command);
 }
