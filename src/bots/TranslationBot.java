@@ -12,6 +12,7 @@ public class TranslationBot implements IBot {
     private final String name = "TranslationBot";
     private boolean isActiveConversation = false; // Für Variante B
     private String targetLanguage = "";
+    private String pendingTextToTranslate = ""; // Für den neuen translate Befehl
 
     private final String apiKey = "21947c34-929d-ad82-932b-5747f7ba2f31:fx";  // Der API-Schlüssel von DeepL
 
@@ -23,8 +24,15 @@ public class TranslationBot implements IBot {
     @Override
     public boolean processCommand(String command) {
         // Variante A: Direktansprache
-        if (command.startsWith("@translatebot ")) {
+        if (command.startsWith("@translatebot")) {
             handleDirectTranslation(command.substring(14).trim());
+            return true;
+        }
+
+        // Neue Bedingung: Reaktion auf "translate {text}"
+        if (command.startsWith("translate")) {
+            String textToTranslate = command.substring(10).trim();
+            initiateTranslationFlow(textToTranslate);
             return true;
         }
 
@@ -35,6 +43,17 @@ public class TranslationBot implements IBot {
         }
 
         return false;
+    }
+
+    private void initiateTranslationFlow(String textToTranslate) {
+        if (!isActiveConversation) {
+            isActiveConversation = true;
+            pendingTextToTranslate = textToTranslate; // Speichern des zu übersetzenden Textes
+            System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
+            System.out.println("    - [EN]glisch");
+            System.out.println("    - [DE]utsch");
+            // Weitere Sprachen können hinzugefügt werden
+        }
     }
 
     private void handleDirectTranslation(String input) {
@@ -62,19 +81,32 @@ public class TranslationBot implements IBot {
             System.out.println("In welche Sprache soll ich übersetzen? Bitte zweistelligen Code eingeben:");
             System.out.println("    - [EN]glisch");
             System.out.println("    - [DE]utsch");
-            // Weitere Sprachen können hinzugefügt werden
             return;
         }
 
         if (targetLanguage.isEmpty()) {
             targetLanguage = command.toUpperCase();
-            System.out.println("Bitte den zu übersetzenden Text eingeben:");
+            if (!pendingTextToTranslate.isEmpty()) {
+                try {
+                    String translatedText = translate(pendingTextToTranslate, targetLanguage);
+                    System.out.println("Translation: " + translatedText);
+                } catch (Exception e) {
+                    System.out.println("Error processing command: " + e.getMessage());
+                } finally {
+                    isActiveConversation = false;
+                    pendingTextToTranslate = "";
+                    targetLanguage = "";
+                }
+            } else {
+                System.out.println("Bitte den zu übersetzenden Text eingeben:");
+            }
             return;
         }
 
         if (command.equalsIgnoreCase("quit")) {
             System.out.println("Bye!");
             isActiveConversation = false;
+            pendingTextToTranslate = "";
             targetLanguage = "";
             return;
         }
@@ -82,7 +114,8 @@ public class TranslationBot implements IBot {
         try {
             String translatedText = translate(command, targetLanguage);
             System.out.println("Translation: " + translatedText);
-            isActiveConversation = false; // Beenden der Konversation nach der Übersetzung
+            isActiveConversation = false;
+            pendingTextToTranslate = "";
             targetLanguage = "";
 
         } catch (Exception e) {
