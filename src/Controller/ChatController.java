@@ -3,6 +3,7 @@ package Controller;
 import model.Message;
 import model.BotManager;
 import Interfaces.IBot;
+import Interfaces.IDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,13 @@ import java.util.Map;
 public class ChatController {
     private BotManager botManager;
     private List<Message> messageHistory;
+    private IDatabase database;
 
-    public ChatController() {
+    // Konstruktor, der die Datenbankinstanz akzeptiert
+    public ChatController(IDatabase database) {
         this.botManager = new BotManager();
         this.messageHistory = new ArrayList<>();
+        this.database = database;
     }
 
     public void registerBot(int id, IBot bot) {
@@ -46,6 +50,7 @@ public class ChatController {
         // Speichere die Benutzereingabe als Nachricht
         Message userMessage = new Message(user, input);
         messageHistory.add(userMessage);
+        database.saveMessage(userMessage); // Nachricht in der Datenbank speichern
 
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
         if (activeBots.isEmpty()) {
@@ -56,12 +61,13 @@ public class ChatController {
         boolean commandProcessed = false;
 
         for (IBot bot : activeBots.values()) {
-            String output=bot.processCommand(input);
+            String output = bot.processCommand(input);
             if (output != null) {
                 commandProcessed = true;
                 // Speichere die Bot-Antwort als Nachricht
-                Message botMessage = new Message(bot.getName(),output);
+                Message botMessage = new Message(bot.getName(), output);
                 messageHistory.add(botMessage);
+                database.saveMessage(botMessage); // Bot-Antwort in der Datenbank speichern
                 System.out.println(output);
             }
         }
@@ -73,5 +79,10 @@ public class ChatController {
 
     public List<Message> getMessageHistory() {
         return messageHistory;
+    }
+
+    // Methode zum Schließen der Datenbankverbindung
+    public void close() {
+        database.close();
     }
 }

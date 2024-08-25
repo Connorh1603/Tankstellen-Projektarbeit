@@ -10,14 +10,13 @@ import java.util.List;
 
 public class Database implements IDatabase {
     private static final String SUPABASE_URL = "https://uhogndirdosqnnbywozi.supabase.co";
-    private static final String API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ";
+    private static final String API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVob2duZGlyZG9zcW5uYnl3b3ppIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNDYwMDIwMywiZXhwIjoyMDQwMTc2MjAzfQ.rE9ykKiHwapQynE89CuhXdHT7xEpDOWY7YiRArHlUII";
     private final OkHttpClient client;
 
     public Database() {
         this.client = new OkHttpClient();
     }
 
-    @Override
     public void saveMessage(Message message) {
         String json = "{ \"sender\": \"" + message.getSender() + "\", " +
                 "\"content\": \"" + message.getContent() + "\", " +
@@ -38,9 +37,12 @@ public class Database implements IDatabase {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-
-            System.out.println(response.body().string());
+            if (!response.isSuccessful()) {
+                System.out.println("Request failed: " + response.code());
+                System.out.println("Response: " + response.body().string());
+            } else {
+                System.out.println("Request succeeded: " + response.body().string());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

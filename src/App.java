@@ -1,5 +1,3 @@
-
-
 import Controller.ChatController;
 import bots.TranslationBot;
 import bots.WeatherBot;
@@ -14,18 +12,22 @@ public class App {
         // Initialisierung der Datenbank
         IDatabase database = new Database();
 
-        // Initialisierung des Controllers
-        ChatController controller = new ChatController();
+        // Initialisierung des Controllers mit der Datenbank
+        ChatController controller = new ChatController(database);
 
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
         controller.registerBot(2, new WikiBot());
         controller.registerBot(3, new TranslationBot());
+
         // Benutzername festlegen
         String user = "User123";
 
         // Verwenden des FrontendAdapters (aktuell für die Konsole)
         IFrontend frontend = new FrontendAdapter(new ConsoleView());
         frontend.start(controller, user);
+
+        // Schließen der Datenbankverbindung nach Programmende
+        controller.close();
     }
 }
