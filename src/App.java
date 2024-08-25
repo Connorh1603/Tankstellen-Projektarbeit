@@ -4,12 +4,16 @@ import Controller.ChatController;
 import bots.TranslationBot;
 import bots.WeatherBot;
 import bots.WikiBot;
+import persistence.Database;
 import view.ConsoleView;
 import view.FrontendAdapter;
 import Interfaces.*;
 
 public class App {
     public static void main(String[] args) throws Exception {
+        // Initialisierung der Datenbank
+        IDatabase database = new Database();
+
         // Initialisierung des Controllers
         ChatController controller = new ChatController();
 
