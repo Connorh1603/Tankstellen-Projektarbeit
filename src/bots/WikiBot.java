@@ -1,7 +1,7 @@
 package bots;
 
 import Interfaces.IBot;
-import Services.WikiService;
+import services.WikiService;
 
 public class WikiBot implements IBot {
 

@@ -3,10 +3,9 @@ package bots;
 
 
 import Interfaces.IBot;
-import Services.CurrentWeatherService;
-import Services.WeatherForecastService;
+import services.CurrentWeatherService;
+import services.WeatherForecastService;
 import model.ListChecker;
-import model.Message;
 
 
 public class WeatherBot implements IBot{

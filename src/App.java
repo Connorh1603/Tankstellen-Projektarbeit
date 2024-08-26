@@ -2,18 +2,22 @@ import Controller.ChatController;
 import bots.TranslationBot;
 import bots.WeatherBot;
 import bots.WikiBot;
-import persistence.Database;
+import model.DatabaseManager;
 import view.ConsoleView;
 import view.FrontendAdapter;
 import Interfaces.*;
 import model.User;
+import persistence.SupabaseDatabase;  // Korrigiert den Importpfad für SupabaseDatabase
 
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // Initialisierung der Datenbank
-        IDatabase database = new Database();
+        // Initialisierung des DatabaseManagers
+        DatabaseManager dbManager = new DatabaseManager();
+
+        // Registrierung der Datenbank
+        dbManager.registerDatabase(new SupabaseDatabase());
 
         // Benutzer anmelden
         Scanner scanner = new Scanner(System.in);
@@ -25,7 +29,7 @@ public class App {
             System.out.print("Passwort: ");
             String password = scanner.nextLine();
 
-            currentUser = database.authenticateUser(username, password);
+            currentUser = dbManager.authenticateUser(username, password);
             if (currentUser == null) {
                 System.out.println("Ungültiger Benutzername oder Passwort.");
             }
@@ -33,11 +37,11 @@ public class App {
 
         System.out.println("Willkommen " + currentUser.getUsername() + "!");
 
-        // Initialisierung des Controllers mit der Datenbank
-        ChatController controller = new ChatController(database);
+        // Initialisierung des Controllers mit dem DatabaseManager
+        ChatController controller = new ChatController(dbManager);
 
         // Chatverlauf laden und anzeigen
-        controller.displayMessageHistory(database.loadMessages(currentUser.getUsername(), 100));
+        controller.displayMessageHistory(dbManager.loadMessages(currentUser.getUsername(), 100));
 
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
@@ -47,8 +51,5 @@ public class App {
         // Verwenden des FrontendAdapters (aktuell für die Konsole)
         IFrontend frontend = new FrontendAdapter(new ConsoleView());
         frontend.start(controller, currentUser.getUsername());
-
-        // Schließen der Datenbankverbindung nach Programmende
-        controller.close();
     }
 }

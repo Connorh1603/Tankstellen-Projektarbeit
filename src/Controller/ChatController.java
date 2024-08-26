@@ -3,7 +3,7 @@ package Controller;
 import model.Message;
 import model.BotManager;
 import Interfaces.IBot;
-import Interfaces.IDatabase;
+import model.DatabaseManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,13 +13,13 @@ import java.util.Map;
 public class ChatController {
     private BotManager botManager;
     private List<Message> messageHistory;
-    private IDatabase database;
+    private DatabaseManager dbManager;
 
-    // Konstruktor, der die Datenbankinstanz akzeptiert
-    public ChatController(IDatabase database) {
+    // Konstruktor, der den DatabaseManager akzeptiert
+    public ChatController(DatabaseManager dbManager) {
         this.botManager = new BotManager();
         this.messageHistory = new ArrayList<>();
-        this.database = database;
+        this.dbManager = dbManager;
     }
 
     public void registerBot(int id, IBot bot) {
@@ -50,7 +50,7 @@ public class ChatController {
     public void processInput(String input, String user) {
         // Speichere die Benutzereingabe als Nachricht
         Message userMessage = new Message(user, input, java.time.LocalDateTime.now());
-        int userMessageId = database.saveMessage(userMessage, null);
+        int userMessageId = dbManager.saveMessage(userMessage, null);
         userMessage.setId(userMessageId);
 
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
@@ -64,7 +64,7 @@ public class ChatController {
             if (output != null && !output.trim().isEmpty()) {
                 // Speichere die Bot-Antwort als Nachricht
                 Message botMessage = new Message(bot.getName(), output, java.time.LocalDateTime.now());
-                int botMessageId = database.saveMessage(botMessage, userMessage.getId());
+                int botMessageId = dbManager.saveMessage(botMessage, userMessage.getId());
                 botMessage.setId(botMessageId);
                 messageHistory.add(botMessage);
 
@@ -93,10 +93,5 @@ public class ChatController {
         for (Message message : messages) {
             System.out.println(message.getTimestamp() + " [" + message.getSender() + "]: " + message.getContent());
         }
-    }
-
-    // Methode zum Schließen der Datenbankverbindung
-    public void close() {
-        database.close();
     }
 }

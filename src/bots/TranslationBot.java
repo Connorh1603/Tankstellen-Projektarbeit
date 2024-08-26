@@ -1,7 +1,7 @@
 package bots;
 
 import Interfaces.IBot;
-import Services.TranslationService;
+import services.TranslationService;
 
 /**
  * Bot für Übersetzungen, der den TranslationService zur Durchführung von Übersetzungen verwendet.
