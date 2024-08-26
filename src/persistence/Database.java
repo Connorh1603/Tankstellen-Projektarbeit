@@ -2,9 +2,14 @@ package persistence;
 
 import Interfaces.IDatabase;
 import model.Message;
-import okhttp3.*;
-
+import model.User;
+import okhttp3.*; // Importiert OkHttp Klassen
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +23,24 @@ public class Database implements IDatabase {
     }
 
     @Override
+    public User authenticateUser(String username, String password) {
+        // Authentifizierungsmethode - Beispielhaft hartkodiert
+        if (username.equals("user1") && password.equals("password1")) {
+            return new User(username, password);
+        }
+        if (username.equals("user2") && password.equals("password2")) {
+            return new User(username, password);
+        }
+        return null; // Authentifizierung fehlgeschlagen
+    }
+
+    @Override
     public void saveMessage(Message message) {
-        // Überprüfe, ob die Nachricht gültig ist
         if (message.getSender() == null || message.getContent() == null || message.getTimestamp() == null) {
             System.out.println("Invalid message, not saving to database.");
             return;
         }
 
-        // Ersetze alle Sonderzeichen, um sicherzustellen, dass der JSON-String korrekt ist
         String json = "{ \"sender\": \"" + escapeJson(message.getSender()) + "\", " +
                 "\"content\": \"" + escapeJson(message.getContent()) + "\", " +
                 "\"timestamp\": \"" + message.getTimestamp() + "\"}";
@@ -66,19 +81,41 @@ public class Database implements IDatabase {
     public List<Message> loadMessages(String username, int limit) {
         List<Message> messages = new ArrayList<>();
         Request request = new Request.Builder()
-                .url(SUPABASE_URL + "/rest/v1/messages?sender=eq." + username + "&limit=" + limit)
+                .url(SUPABASE_URL + "/rest/v1/messages?sender=eq." + username + "&limit=" + limit + "&order=timestamp.desc")
                 .get()
                 .addHeader("apikey", API_KEY)
                 .addHeader("Authorization", "Bearer " + API_KEY)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
 
             String jsonResponse = response.body().string();
-            // Hier würdest du das JSON-Response parsen und in Message-Objekte umwandeln
-            // Zum Beispiel mit Jackson oder Gson
-        } catch (IOException e) {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+
+            // Standard ISO-8601-Format verwenden
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String sender = jsonObject.getString("sender");
+                String content = jsonObject.getString("content");
+                String timestampStr = jsonObject.getString("timestamp");
+
+                LocalDateTime timestamp = null;
+                try {
+                    timestamp = LocalDateTime.parse(timestampStr, formatter);
+                } catch (DateTimeParseException e) {
+                    e.printStackTrace(); // Fehlerbehandlung bei Parsing-Problemen
+                }
+
+                Message message = new Message(sender, content, timestamp);
+                messages.add(message);
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

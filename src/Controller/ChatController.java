@@ -48,7 +48,7 @@ public class ChatController {
 
     public void processInput(String input, String user) {
         // Speichere die Benutzereingabe als Nachricht
-        Message userMessage = new Message(user, input);
+        Message userMessage = new Message(user, input, java.time.LocalDateTime.now());
         messageHistory.add(userMessage);
         database.saveMessage(userMessage); // Nachricht in der Datenbank speichern
 
@@ -65,7 +65,7 @@ public class ChatController {
             if (output != null && !output.trim().isEmpty()) {  // Sicherstellen, dass die Ausgabe nicht leer ist
                 commandProcessed = true;
                 // Speichere die Bot-Antwort als Nachricht
-                Message botMessage = new Message(bot.getName(), output);
+                Message botMessage = new Message(bot.getName(), output, java.time.LocalDateTime.now());
                 messageHistory.add(botMessage);
                 database.saveMessage(botMessage); // Bot-Antwort in der Datenbank speichern
                 System.out.println(output);
@@ -79,6 +79,19 @@ public class ChatController {
 
     public List<Message> getMessageHistory() {
         return messageHistory;
+    }
+
+    // Hier ist die displayMessageHistory Methode
+    public void displayMessageHistory(List<Message> messages) {
+        if (messages.isEmpty()) {
+            System.out.println("Keine Nachrichten im Chatverlauf.");
+            return;
+        }
+
+        System.out.println("Chatverlauf:");
+        for (Message message : messages) {
+            System.out.println(message.getTimestamp() + " [" + message.getSender() + "]: " + message.getContent());
+        }
     }
 
     // Methode zum Schließen der Datenbankverbindung

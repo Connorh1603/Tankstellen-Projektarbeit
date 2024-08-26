@@ -7,10 +7,10 @@ public class Message {
     private String content;
     private LocalDateTime timestamp;
 
-    public Message(String sender, String content) {
+    public Message(String sender, String content, LocalDateTime timestamp) {
         this.sender = sender;
         this.content = content;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = timestamp;
     }
 
     public String getSender() {
