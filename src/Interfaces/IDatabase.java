@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IDatabase {
     User authenticateUser(String username, String password);
-    void saveMessage(Message message);
+    int saveMessage(Message message, Integer relatedMessageId); // Rückgabewert int für die Nachricht ID
     List<Message> loadMessages(String username, int limit);
     void close();
 }

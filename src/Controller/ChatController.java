@@ -6,6 +6,7 @@ import Interfaces.IBot;
 import Interfaces.IDatabase;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -49,8 +50,8 @@ public class ChatController {
     public void processInput(String input, String user) {
         // Speichere die Benutzereingabe als Nachricht
         Message userMessage = new Message(user, input, java.time.LocalDateTime.now());
-        messageHistory.add(userMessage);
-        database.saveMessage(userMessage); // Nachricht in der Datenbank speichern
+        int userMessageId = database.saveMessage(userMessage, null);
+        userMessage.setId(userMessageId);
 
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
         if (activeBots.isEmpty()) {
@@ -58,22 +59,19 @@ public class ChatController {
             return;
         }
 
-        boolean commandProcessed = false;
-
         for (IBot bot : activeBots.values()) {
             String output = bot.processCommand(input);
-            if (output != null && !output.trim().isEmpty()) {  // Sicherstellen, dass die Ausgabe nicht leer ist
-                commandProcessed = true;
+            if (output != null && !output.trim().isEmpty()) {
                 // Speichere die Bot-Antwort als Nachricht
                 Message botMessage = new Message(bot.getName(), output, java.time.LocalDateTime.now());
+                int botMessageId = database.saveMessage(botMessage, userMessage.getId());
+                botMessage.setId(botMessageId);
                 messageHistory.add(botMessage);
-                database.saveMessage(botMessage); // Bot-Antwort in der Datenbank speichern
-                System.out.println(output);
-            }
-        }
 
-        if (!commandProcessed) {
-            System.out.println("No bot recognized the command.");
+                // Sofortige Ausgabe der Benutzeranfrage und der Bot-Antwort
+                System.out.println(userMessage.getTimestamp() + " [" + userMessage.getSender() + "]: " + userMessage.getContent());
+                System.out.println(botMessage.getTimestamp() + " [" + botMessage.getSender() + "]: " + botMessage.getContent());
+            }
         }
     }
 
@@ -87,6 +85,9 @@ public class ChatController {
             System.out.println("Keine Nachrichten im Chatverlauf.");
             return;
         }
+
+        // Sortiere die Nachrichten nach Zeitstempel, damit Benutzer-Nachricht und Bot-Antwort zusammen erscheinen
+        messages.sort(Comparator.comparing(Message::getTimestamp));
 
         System.out.println("Chatverlauf:");
         for (Message message : messages) {
