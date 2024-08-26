@@ -17,9 +17,17 @@ public class Database implements IDatabase {
         this.client = new OkHttpClient();
     }
 
+    @Override
     public void saveMessage(Message message) {
-        String json = "{ \"sender\": \"" + message.getSender() + "\", " +
-                "\"content\": \"" + message.getContent() + "\", " +
+        // Überprüfe, ob die Nachricht gültig ist
+        if (message.getSender() == null || message.getContent() == null || message.getTimestamp() == null) {
+            System.out.println("Invalid message, not saving to database.");
+            return;
+        }
+
+        // Ersetze alle Sonderzeichen, um sicherzustellen, dass der JSON-String korrekt ist
+        String json = "{ \"sender\": \"" + escapeJson(message.getSender()) + "\", " +
+                "\"content\": \"" + escapeJson(message.getContent()) + "\", " +
                 "\"timestamp\": \"" + message.getTimestamp() + "\"}";
 
         RequestBody body = RequestBody.create(
@@ -46,6 +54,12 @@ public class Database implements IDatabase {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String escapeJson(String text) {
+        return text.replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r");
     }
 
     @Override

@@ -62,7 +62,7 @@ public class ChatController {
 
         for (IBot bot : activeBots.values()) {
             String output = bot.processCommand(input);
-            if (output != null) {
+            if (output != null && !output.trim().isEmpty()) {  // Sicherstellen, dass die Ausgabe nicht leer ist
                 commandProcessed = true;
                 // Speichere die Bot-Antwort als Nachricht
                 Message botMessage = new Message(bot.getName(), output);
