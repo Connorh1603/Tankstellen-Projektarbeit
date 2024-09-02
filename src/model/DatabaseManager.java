@@ -31,7 +31,6 @@ public class DatabaseManager {
         return null;
     }
 
-    // Änderung
     public int saveMessage(Message message, Integer relatedMessageId) {
         String json = "{ \"sender\": \"" + message.getSender() + "\", " +
                 "\"content\": \"" + escapeJson(message.getContent()) + "\", " +
