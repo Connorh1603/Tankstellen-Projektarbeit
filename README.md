@@ -10,7 +10,7 @@ Diese Dokumentation bildet nicht nur die Basis für die laufende Wartung und das
 
 Aufgabe 6.1.7
 
-In der Aufgabe 6.1.7 wird die statische Struktur eines Softwaresystems durch die Unterscheidung zwischen White-Boxes und Black-Boxes dargestellt. White-Boxes bieten detaillierte Einblicke in die internen Abläufe der Systemkomponenten, während Black-Boxes eine vereinfachte, funktionale Sichtweise bieten. Diese Methode hilft, die Systemarchitektur klarer zu verstehen.
+In der Aufgabe 6.1.7 wird die statische Struktur des Chat-Bots durch die Unterscheidung zwischen White-Boxes und Black-Boxes dargestellt. White-Boxes bieten detaillierte Einblicke in die internen Abläufe der Systemkomponenten, während Black-Boxes eine vereinfachte, funktionale Sichtweise bieten. Diese Methode hilft, die Systemarchitektur klarer zu verstehen.
 
 White-Boxen
 
