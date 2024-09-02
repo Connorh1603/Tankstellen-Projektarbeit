@@ -1,18 +1,9 @@
-## Getting Started
+# Systemdokumentation für Chatbot-System
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Einleitung
 
-## Folder Structure
+Dieses Dokument dient als umfassende Systemdokumentation für das Chatbot-System, entwickelt als Teil des SMA-Kurses an der FHDW. Ziel dieser Dokumentation ist es, einen detaillierten Überblick über die Architektur und die interne Arbeitsweise des Systems zu bieten, um das Verständnis und die weitere Entwicklung des Systems zu erleichtern.
 
-The workspace contains two folders by default, where:
+Das Chatbot-System soll einfache Anfragen zu Dingen wie dem Wetter, übersetzungen etc. beantworten können. Dabei setzt das System auf eine modulare Architektur, die mithilfe von Github in verschiedensten Entwicklungsumgebungen bearbeitet werden kann. Die Hauptkomponenten umfassen verschiedene Module für Bot-Logik, Datenpersistenz, Nutzerschnittstellen und mehr, die im folgenden Dokument detailliert beschrieben werden. Implementiert sind Bots für Wetter, Übersetzung und Trivia-Fakten bzw. Wiki Einträge, das system lässt sich aber ohne Problöeme um weitere Bots erweitern.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Diese Dokumentation bildet nicht nur die Basis für die laufende Wartung und das Debugging des Systems, sondern soll auch zukünftigen Entwicklern als Leitfaden dienen, um das System effektiv zu erweitern oder anzupassen.
