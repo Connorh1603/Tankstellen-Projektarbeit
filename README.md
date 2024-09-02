@@ -8,9 +8,9 @@ Das Chatbot-System soll einfache Anfragen zu Dingen wie dem Wetter, übersetzung
 
 Diese Dokumentation bildet nicht nur die Basis für die laufende Wartung und das Debugging des Systems, sondern soll auch zukünftigen Entwicklern als Leitfaden dienen, um das System effektiv zu erweitern oder anzupassen.
 
-Aufgabe 6.1.7
+Bausteinschicht Whitebox/Blackbox:
 
-In der Aufgabe 6.1.7 wird die statische Struktur des Chat-Bots durch die Unterscheidung zwischen White-Boxes und Black-Boxes dargestellt. White-Boxes bieten detaillierte Einblicke in die internen Abläufe der Systemkomponenten, während Black-Boxes eine vereinfachte, funktionale Sichtweise bieten. Diese Methode hilft, die Systemarchitektur klarer zu verstehen.
+In der Bausteinschicht wird die statische Struktur des Chat-Bots durch die Unterscheidung zwischen White-Boxes und Black-Boxes dargestellt. White-Boxes bieten detaillierte Einblicke in die internen Abläufe der Systemkomponenten, während Black-Boxes eine vereinfachte, funktionale Sichtweise bieten. Diese Methode hilft, die Systemarchitektur klarer zu verstehen.
 
 White-Boxen
 
