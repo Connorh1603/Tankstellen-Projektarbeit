@@ -44,66 +44,113 @@ classDiagram
     class ChatController {
       +BotManager botManager
       +DatabaseManager databaseManager
+      +registerBot()
+      +activateBot()
+      +deactivateBot()
+      +listAvailableBots()
+      +processInput()
+      +getMessageHistory()
+      +displayMessageHistory()
     }
     class BotManager {
-      +List bots
+      -List availableBots
+      -List activeBots
+      +registerBot()
+      +activateBot()
+      +deactivateBot()
+      +getBot()
+      getActiveBots()
+      getAvailableBots()
     }
     class DatabaseManager {
       +SubapaseDatabase database
+      +registerDatabase()
+      +authenticateUser()
+      +saveMessage()
+      +loadMessages()
+      +escapeJson()
+      +getMessageIdsAsCsv()
     }
     class SubapaseDatabase {
-      +connect()
-      +disconnect()
+      -OkHttpClient client
+      +getDatabaseUrl()
+      +getApiKey()
+  	  +getClient() 
     }
     class ConsoleView {
-      +displayOutput()
-      +collectInput()
+      +display()
+      +readInput()
+      +run()
+      +displayMessageHistory()
     }
     class FrontendAdapter {
-      +sendRequest()
-      +receiveResponse()
+      +start()
+      +displayMessage()
+      +getUserInput()
+      +displayMessageHistory()
+    }
+    class IFrontend {
+      <<interface>>
+      +start()
+      +displayMessage()
+      +getUserInput()
+      +displayMessageHistory()
     }
     class IBot {
       <<interface>>
-      +sendMessage()
-      +receiveMessage()
+      getName();
+      processCommand(String command);
     }
     class WeatherBot {
-      +getWeather()
+      +getName()
+      +processCommand()
     }
     class WikiBot {
-      +fetchArticle()
+      +getName()
+      +processCommand()
     }
     class TranslationBot {
-      +translateText()
+      -handleDirectTranslation()
+      +getName()
+      +processCommand()
     }
     class CurrentWeatherService {
-      +getWeather()
+      +getWeatherInfo()
     }
     class WeatherForecastService {
-      +getWeather()
+      +getForecastInfo()
     }
     class TranslationService {
-      +translateText()
+      +getInstance()
     }
     class WikiService {
-      +fetchArticle()
+      +fetchWikiSummary()
     }
     class User {
-      +String name
-      +String id
+      -String username
+      -String password
+      +getUsername()
+      +validatePassword()
     }
     class Message {
-      +String text
-      +String timestamp
+      -int id
+      -String sender
+      -String content
+      -LocalDateTime timestamp
+      +getId()
+      +setId()
+      +getSender()
+      +getContent()
+      +getTimestamp()
     }
 
     ChatController "1" --> "*" BotManager : uses
     ChatController "1" --> "1" DatabaseManager : uses
     BotManager "1" --> "*" IBot : manages
     DatabaseManager "1" --> "1" SubapaseDatabase : connects
-    ConsoleView "1" --> "1" FrontendAdapter : interacts
-    FrontendAdapter "1" --> "1" ChatController : sends commands
+    FrontendAdapter --|> IFrontend : implements
+    IFrontend <|.. FrontendAdapter : <<use>>
+    ConsoleView --> FrontendAdapter : uses
     IBot <|-- WeatherBot
     IBot <|-- WikiBot
     IBot <|-- TranslationBot
