@@ -44,26 +44,19 @@ classDiagram
     class ChatController {
       +BotManager botManager
       +DatabaseManager databaseManager
-      +registerBot()
-      +activateBot()
-      +deactivateBot()
+      +"botCommands()"
       +listAvailableBots()
       +processInput()
       +getMessageHistory()
       +displayMessageHistory()
     }
     class BotManager {
-      -List availableBots
-      -List activeBots
-      +registerBot()
-      +activateBot()
-      +deactivateBot()
+      +"botCommands()"
       +getBot()
       getActiveBots()
       getAvailableBots()
     }
     class DatabaseManager {
-      +SubapaseDatabase database
       +registerDatabase()
       +authenticateUser()
       +saveMessage()
@@ -72,7 +65,6 @@ classDiagram
       +getMessageIdsAsCsv()
     }
     class SubapaseDatabase {
-      -OkHttpClient client
       +getDatabaseUrl()
       +getApiKey()
   	  +getClient() 
@@ -127,16 +119,10 @@ classDiagram
       +fetchWikiSummary()
     }
     class User {
-      -String username
-      -String password
       +getUsername()
       +validatePassword()
     }
     class Message {
-      -int id
-      -String sender
-      -String content
-      -LocalDateTime timestamp
       +getId()
       +setId()
       +getSender()
@@ -149,7 +135,7 @@ classDiagram
     BotManager "1" --> "*" IBot : manages
     DatabaseManager "1" --> "1" SubapaseDatabase : connects
     FrontendAdapter --|> IFrontend : implements
-    IFrontend <|.. FrontendAdapter : <<use>>
+    IFrontend <|.. FrontendAdapter : use
     ConsoleView --> FrontendAdapter : uses
     IBot <|-- WeatherBot
     IBot <|-- WikiBot
