@@ -80,6 +80,9 @@ classDiagram
     class CurrentWeatherService {
       +getWeather()
     }
+    class WeatherForecastService {
+      +getWeather()
+    }
     class TranslationService {
       +translateText()
     }
@@ -105,5 +108,6 @@ classDiagram
     IBot <|-- WikiBot
     IBot <|-- TranslationBot
     WeatherBot --> CurrentWeatherService : uses
+    WeatherBot --> WeatherForecastService : uses
     WikiBot --> WikiService : uses
     TranslationBot --> TranslationService : uses
