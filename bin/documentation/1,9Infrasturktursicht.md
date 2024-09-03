@@ -42,8 +42,6 @@ Unten ist das UML-Komponentendiagramm, das die Hauptkomponenten unseres Chatbot-
 ```mermaid
 classDiagram
     class ChatController {
-      +BotManager botManager
-      +DatabaseManager databaseManager
       +"botCommands()"
       +listAvailableBots()
       +processInput()
@@ -135,7 +133,6 @@ classDiagram
     BotManager "1" --> "*" IBot : manages
     DatabaseManager "1" --> "1" SubapaseDatabase : connects
     FrontendAdapter --|> IFrontend : implements
-    IFrontend <|.. FrontendAdapter : use
     ConsoleView --> FrontendAdapter : uses
     IBot <|-- WeatherBot
     IBot <|-- WikiBot
