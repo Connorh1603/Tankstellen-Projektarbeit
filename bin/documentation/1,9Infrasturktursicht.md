@@ -68,6 +68,15 @@ classDiagram
       +sendMessage()
       +receiveMessage()
     }
+    class WeatherBot {
+      +getWeather()
+    }
+    class WikiBot {
+      +fetchArticle()
+    }
+    class TranslationBot {
+      +translateText()
+    }
     class CurrentWeatherService {
       +getWeather()
     }
@@ -92,6 +101,9 @@ classDiagram
     DatabaseManager "1" --> "1" SubapaseDatabase : connects
     ConsoleView "1" --> "1" FrontendAdapter : interacts
     FrontendAdapter "1" --> "1" ChatController : sends commands
-    CurrentWeatherService ..> IBot : provides data to
-    TranslationService ..> IBot : provides data to
-    WikiService ..> IBot : provides data to
+    IBot <|-- WeatherBot
+    IBot <|-- WikiBot
+    IBot <|-- TranslationBot
+    WeatherBot --> CurrentWeatherService : uses
+    WikiBot --> WikiService : uses
+    TranslationBot --> TranslationService : uses
