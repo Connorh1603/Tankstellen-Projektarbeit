@@ -3,7 +3,7 @@
 
 Unser Chatbot-System ist als lokale Anwendung konzipiert, die auf einem einzelnen Computer oder Server läuft. Die technische Infrastruktur ist daher relativ einfach und fokussiert sich auf die Interaktion mit externen Diensten über REST APIs.
 
-    Lokale Anwendung: Die Hauptanwendung, bestehend aus den Java-Programmen und -Bibliotheken (einschließlich json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, und okio-2.10.0.jar), wird auf einem einzelnen Rechner oder Server ausgeführt.
+Lokale Anwendung: Die Hauptanwendung, bestehend aus den Java-Programmen und -Bibliotheken (einschließlich json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, und okio-2.10.0.jar), wird auf einem einzelnen Rechner oder Server ausgeführt.
 
 ## Erweiterte Systemtopologie
 
@@ -95,37 +95,3 @@ classDiagram
     CurrentWeatherService ..> IBot : provides data to
     TranslationService ..> IBot : provides data to
     WikiService ..> IBot : provides data to
-
-
-Verteilungsdiagramm
-graph TD
-    node1[Computer]
-    subgraph node1
-        app[App.jar]
-        json[json-20240303.jar]
-        kotlin[kotlin-stdlib-2.0.20.jar]
-        okhttp[okhttp-4.9.3.jar]
-        okio[okio-2.10.0.jar]
-    end
-    node2[External API Server]
-    subgraph node2
-        weatherAPI[Weather API]
-        translationAPI[Translation API]
-        wikiAPI[Wiki API]
-    end
-    app -->|calls| weatherAPI
-    app -->|calls| translationAPI
-    app -->|calls| wikiAPI
-
-Im Verteilungsdiagramm für unsere lokale Anwendung würden folgende Elemente dargestellt:
-
-    Node: Ein physischer Computer oder Server, auf dem die Java-Anwendung ausgeführt wird.
-    Artefakte: Die Java JAR-Dateien, die auf diesem Computer deployed sind.
-    Kommunikation: Die API-Anfragen, die von den Service-Klassen an externe Server über das Internet gesendet werden, um Daten für die Chatbot-Funktionalitäten zu erhalten.
-
-Motivation
-
-Eine einfache, lokale Infrastruktur wurde gewählt, um die Entwicklung und Wartung des Systems zu vereinfachen und die Abhängigkeit von externen Diensten zu minimieren. Dies erleichtert die schnelle Iteration und das Debugging während der Entwicklungsphase. Die detaillierte Schichtung der Systemkomponenten ermöglicht ein besseres Verständnis der Funktionen und Verantwortlichkeiten innerhalb des Systems, was die Modularität und die Wartbarkeit verbessert.
-Form
-
-Für die Darstellung der Infrastruktursicht empfehlen wir die Verwendung eines UML-Verteilungsdiagramms, das die lokale Anwendung und die externe Kommunikation klar visualisiert. Dies kann mit einfachen Zeichentools oder UML-Modellierungswerkzeugen erstellt werden.
