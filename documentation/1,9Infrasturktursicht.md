@@ -47,7 +47,7 @@ classDiagram
     App --> FrontendAdapter
     FrontendAdapter <|-- IFrontend
     FrontendAdapter --> ConsoleView
-    ```
+```
 ### Anwendungsschicht (Application/Business Logic Layer)
 
 #### Zweck: 
