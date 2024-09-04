@@ -26,6 +26,7 @@ Definieren die Datenstrukturen, die für die Verwaltung von Benutzerinformatione
 ListChecker.java: 
 Kann verwendet werden, um bestimmte Validierungen oder Überprüfungen auf Datenlisten durchzuführen, die in der Anwendung verwendet werden.
 
+
 ### Datenzugriffsschicht:
 Database.java: 
 Steuert den Zugriff auf die Datenbank und die Verwaltung von Benutzerdaten und Chat-Historien.
@@ -44,72 +45,133 @@ Kümmert sich um die Befehle, die die Bots verwalten und sorgt für entlastung d
 
 Unten ist das UML-Komponentendiagramm, das die Hauptkomponenten unseres Chatbot-Systems zeigt:
 
-```mermaid
 classDiagram
     class App {
+        -BotManager botManager
+        -FrontendAdapter frontend
+        +main(String[] args)
     }
 
-    %% Presentation Layer
-    class ConsoleView {
-    }
-    class FrontendAdapter {
-    }
-
-    ConsoleView --> FrontendAdapter : uses
-
-    %% Application Layer - Controller
-    class ChatController {
-    }
-
-    ChatController --> BotManager : coordinates
-    ChatController --> Database : accesses
-    ChatController --> DatabaseAdapter : accesses
-    ChatController --> SubapaseDatabase : accesses
-    ChatController --> TranslationService : calls
-    ChatController --> WikiService : calls
-    ChatController --> CurrentWeatherService : calls
-    ChatController --> WeatherForecastService : calls
-
-    %% Application Layer - Model
     class BotManager {
+        -List~IBot~ bots
+        +registerBot(IBot bot)
+        +getBot(String name): IBot
     }
-    class User {
+
+    class ChatController {
+        -BotManager botManager
+        +ChatController(BotManager botManager)
+        +processMessage(Message message): String
     }
+
+    class IBot {
+        <<interface>>
+        +processMessage(String message): String
+        +getName(): String
+    }
+
+    class TranslationBot {
+        -TranslationService translationService
+        +TranslationBot(TranslationService service)
+        +processMessage(String message): String
+        +getName(): String
+    }
+
+    class WeatherBot {
+        -WeatherForecastService weatherService
+        +WeatherBot(WeatherForecastService service)
+        +processMessage(String message): String
+        +getName(): String
+    }
+
+    class WikiBot {
+        -WikiService wikiService
+        +WikiBot(WikiService service)
+        +processMessage(String message): String
+        +getName(): String
+    }
+
     class Message {
-    }
-    class ListChecker {
+        -String content
+        -User sender
+        +Message(String content, User sender)
+        +getContent(): String
+        +getSender(): User
     }
 
-    BotManager --> BotRegistryService : manages
-    BotManager --> User : uses
-    BotManager --> Message : uses
-    BotManager --> ListChecker : uses
+    class User {
+        -String name
+        +User(String name)
+        +getName(): String
+    }
 
-    %% Data Access Layer
+    class IFrontend {
+        <<interface>>
+        +displayMessage(String message)
+        +getUserInput(): String
+    }
+
+    class ConsoleView {
+        +displayMessage(String message)
+        +getUserInput(): String
+    }
+
+    class IDatabase {
+        <<interface>>
+        +saveMessage(Message message)
+        +getMessageHistory(): List~Message~
+    }
+
     class Database {
+        -List~Message~ messages
+        +saveMessage(Message message)
+        +getMessageHistory(): List~Message~
     }
+
+    class SupabaseService {
+        +saveToDatabase(Message message)
+        +fetchFromDatabase(): List~Message~
+    }
+
+    class FrontendAdapter {
+        -IFrontend frontend
+        +FrontendAdapter(IFrontend frontend)
+        +displayMessage(String message)
+        +getUserInput(): String
+    }
+
     class DatabaseAdapter {
+        -IDatabase database
+        +DatabaseAdapter(IDatabase database)
+        +saveMessage(Message message)
+        +getMessageHistory(): List~Message~
     }
 
-    DatabaseAdapter --> Database : interacts
-
-    %% Services and Integration Layer
-    class SubapaseDatabase {
-    }
-    class CurrentWeatherService {
-    }
     class TranslationService {
-    }
-    class WikiService {
-    }
-    class WeatherForecastService {
-    }
-    class BotRegistryService {
+        +translate(String text, String targetLanguage): String
     }
 
-    SubapaseDatabase --> DatabaseAdapter : implements
-    TranslationService --> SubapaseDatabase : interacts
-    WikiService --> SubapaseDatabase : interacts
-    CurrentWeatherService --> SubapaseDatabase : interacts
-    WeatherForecastService --> SubapaseDatabase : interacts
-    BotRegistryService --> BotManager : manages bots
+    class WeatherForecastService {
+        +getForecast(String location): String
+    }
+
+    class WikiService {
+        +search(String query): String
+    }
+
+    App --> BotManager
+    App --> FrontendAdapter
+    BotManager --> IBot
+    ChatController --> BotManager
+    IBot <|.. TranslationBot
+    IBot <|.. WeatherBot
+    IBot <|.. WikiBot
+    TranslationBot --> TranslationService
+    WeatherBot --> WeatherForecastService
+    WikiBot --> WikiService
+    Message --> User
+    FrontendAdapter --> IFrontend
+    ConsoleView --> IFrontend
+    DatabaseAdapter --> IDatabase
+    Database --> IDatabase
+    SupabaseService --> IDatabase
