@@ -241,135 +241,16 @@ classDiagram
     Database --> SupabaseService
 ```
 
-Unten ist das UML-Komponentendiagramm, das die Hauptkomponenten unseres Chatbot-Systems zeigt:
+Die Schichten Agieren wie folgt miteinander:
 ```mermaid
 classDiagram
-    class App {
-        -BotManager botManager
-        -FrontendAdapter frontend
-        +main(String[] args)
-    }
+    class Anwendungsschicht
+    class Datenhaltungsschicht
+    class Diensteschicht
+    class Präsentationsschicht
 
-    class BotManager {
-        -List~IBot~ bots
-        +registerBot(IBot bot)
-        +getBot(String name): IBot
-    }
-
-    class ChatController {
-        -BotManager botManager
-        +ChatController(BotManager botManager)
-        +processMessage(Message message): String
-    }
-
-    class IBot {
-        <<interface>>
-        +processMessage(String message): String
-        +getName(): String
-    }
-
-    class TranslationBot {
-        -TranslationService translationService
-        +TranslationBot(TranslationService service)
-        +processMessage(String message): String
-        +getName(): String
-    }
-
-    class WeatherBot {
-        -WeatherForecastService weatherService
-        +WeatherBot(WeatherForecastService service)
-        +processMessage(String message): String
-        +getName(): String
-    }
-
-    class WikiBot {
-        -WikiService wikiService
-        +WikiBot(WikiService service)
-        +processMessage(String message): String
-        +getName(): String
-    }
-
-    class Message {
-        -String content
-        -User sender
-        +Message(String content, User sender)
-        +getContent(): String
-        +getSender(): User
-    }
-
-    class User {
-        -String name
-        +User(String name)
-        +getName(): String
-    }
-
-    class IFrontend {
-        <<interface>>
-        +displayMessage(String message)
-        +getUserInput(): String
-    }
-
-    class ConsoleView {
-        +displayMessage(String message)
-        +getUserInput(): String
-    }
-
-    class IDatabase {
-        <<interface>>
-        +saveMessage(Message message)
-        +getMessageHistory(): List~Message~
-    }
-
-    class Database {
-        -List~Message~ messages
-        +saveMessage(Message message)
-        +getMessageHistory(): List~Message~
-    }
-
-    class SupabaseService {
-        +saveToDatabase(Message message)
-        +fetchFromDatabase(): List~Message~
-    }
-
-    class FrontendAdapter {
-        -IFrontend frontend
-        +FrontendAdapter(IFrontend frontend)
-        +displayMessage(String message)
-        +getUserInput(): String
-    }
-
-    class DatabaseAdapter {
-        -IDatabase database
-        +DatabaseAdapter(IDatabase database)
-        +saveMessage(Message message)
-        +getMessageHistory(): List~Message~
-    }
-
-    class TranslationService {
-        +translate(String text, String targetLanguage): String
-    }
-
-    class WeatherForecastService {
-        +getForecast(String location): String
-    }
-
-    class WikiService {
-        +search(String query): String
-    }
-
-    App --> BotManager
-    App --> FrontendAdapter
-    BotManager --> IBot
-    ChatController --> BotManager
-    IBot <|.. TranslationBot
-    IBot <|.. WeatherBot
-    IBot <|.. WikiBot
-    TranslationBot --> TranslationService
-    WeatherBot --> WeatherForecastService
-    WikiBot --> WikiService
-    Message --> User
-    FrontendAdapter <|-- IFrontend
-    FrontendAdapter --> ConsoleView
-    DatabaseAdapter --> IDatabase
-    Database --> IDatabase
-    SupabaseService --> IDatabase
+    Anwendungsschicht --> Diensteschicht 
+    Datenhaltungsschicht --> Diensteschicht 
+    Präsentationsschicht --> Anwendungsschicht
+    Anwendungsschicht --> Datenhaltungsschicht
+```
