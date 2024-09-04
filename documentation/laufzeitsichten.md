@@ -1,27 +1,27 @@
 ## 1.8. Laufzeitsichten
 
-Das Verhalten des Systems zur Laufzeit kann durch die folgenden Szenarien beschrieben werden, die die wichtigsten Prozesse abdecken:
+Das Verhalten des Systems zur Laufzeit kann durch folgende Szenarien beschrieben werden:
 
 ### Szenario 1: Übersetzungsanfrage an den TranslationBot
-1. **Benutzerinteraktion:** Der Benutzer gibt den Befehl `@translatebot en Hallo` ein, um das Wort "Hallo" ins Englische zu übersetzen.
-2. **Eingangsverarbeitung:** Der `ChatController` empfängt die Eingabe und speichert sie als `Message` in der Datenbank über den `DatabaseManager`.
-3. **Bot-Aktivierung:** Der `BotManager` hat den `TranslationBot` bereits aktiviert. Der `ChatController` ruft die `processCommand`-Methode des `TranslationBot` auf.
-4. **Befehlsverarbeitung:** Der `TranslationBot` analysiert den Befehl, extrahiert den Zielsprachen-Code und den Text, und ruft die `translate`-Methode des `TranslationService` auf.
-5. **API-Kommunikation:** Der `TranslationService` kommuniziert mit der DeepL API, um die Übersetzung durchzuführen.
-6. **Antwort:** Die übersetzte Nachricht wird vom `TranslationBot` an den `ChatController` zurückgegeben, der sie in der Datenbank speichert und an den Benutzer ausgibt.
+1. **Benutzerinteraktion:** Der Benutzer gibt den Befehl `@translatebot en Hallo` ein.
+2. **Eingangsverarbeitung:** Der `ChatController` empfängt die Eingabe und speichert sie als `Message`.
+3. **Bot-Aktivierung:** Der `TranslationBot` wird aktiviert, und die `processCommand`-Methode wird aufgerufen.
+4. **Befehlsverarbeitung:** Der Bot extrahiert die Zielsprache und den Text und ruft den `TranslationService` auf.
+5. **API-Kommunikation:** Der `TranslationService` übersetzt den Text mithilfe der DeepL API.
+6. **Antwort:** Die Übersetzung wird zurückgegeben, gespeichert und an den Benutzer ausgegeben.
 
 ### Szenario 2: Wetteranfrage an den WeatherBot
-1. **Benutzerinteraktion:** Der Benutzer gibt den Befehl `Wie ist das Wetter in Berlin?` ein.
-2. **Eingangsverarbeitung:** Der `ChatController` empfängt den Befehl und speichert ihn in der Datenbank.
-3. **Bot-Aktivierung:** Der `BotManager` aktiviert den `WeatherBot`.
-4. **Befehlsverarbeitung:** Der `WeatherBot` analysiert den Befehl, erkennt die Anfrage nach aktuellem Wetter und verwendet den `ListChecker`, um die Stadt im Befehl zu extrahieren.
-5. **API-Kommunikation:** Der `WeatherBot` verwendet den `CurrentWeatherService`, um aktuelle Wetterdaten von der OpenWeatherMap API abzurufen.
-6. **Antwort:** Die Wetterinformationen werden dem Benutzer über den `ChatController` zurückgegeben und in der Datenbank gespeichert.
+1. **Benutzerinteraktion:** Der Benutzer fragt nach dem Wetter in einer Stadt.
+2. **Eingangsverarbeitung:** Der `ChatController` empfängt und speichert die Eingabe.
+3. **Bot-Aktivierung:** Der `WeatherBot` wird aktiviert.
+4. **Befehlsverarbeitung:** Der Bot erkennt den Befehl und verwendet den `ListChecker`, um die Stadt zu extrahieren.
+5. **API-Kommunikation:** Der `WeatherBot` nutzt die OpenWeatherMap API, um aktuelle Wetterdaten abzurufen.
+6. **Antwort:** Die Wetterdaten werden zurückgegeben und dem Benutzer ausgegeben.
 
 ### Szenario 3: Wikipedia-Abfrage an den WikiBot
-1. **Benutzerinteraktion:** Der Benutzer gibt den Befehl `@wiki Berlin` ein, um Informationen über Berlin zu erhalten.
-2. **Eingangsverarbeitung:** Der `ChatController` empfängt den Befehl und speichert ihn in der Datenbank.
+1. **Benutzerinteraktion:** Der Benutzer fragt nach Informationen zu einem Begriff.
+2. **Eingangsverarbeitung:** Der `ChatController` empfängt und speichert die Anfrage.
 3. **Bot-Aktivierung:** Der `WikiBot` wird aktiviert.
-4. **Befehlsverarbeitung:** Der `WikiBot` analysiert den Befehl, extrahiert den Suchbegriff und kommuniziert mit der Wikipedia API.
-5. **API-Kommunikation:** Der `WikiBot` ruft eine Zusammenfassung des Wikipedia-Artikels über die Wikipedia API ab.
-6. **Antwort:** Die erhaltene Zusammenfassung wird an den Benutzer zurückgegeben und in der Datenbank gespeichert.
+4. **Befehlsverarbeitung:** Der Bot extrahiert den Suchbegriff und ruft die Wikipedia API auf.
+5. **API-Kommunikation:** Der Bot holt die Daten von der API.
+6. **Antwort:** Die Informationen werden dem Benutzer zurückgegeben.
