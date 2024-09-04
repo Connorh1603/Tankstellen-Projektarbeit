@@ -35,55 +35,58 @@ Diese Bibliotheken können entweder manuell in das Projektverzeichnis kopiert od
 ## 4. Installation und Einrichtung
 ### Repository klonen
 
-    Öffnen Sie Ihr Terminal oder Ihre Eingabeaufforderung.
-    Navigieren Sie zu dem Verzeichnis, in dem Sie das Projekt speichern möchten.
-    Klonen Sie das Repository von GitHub:
+Öffnen Sie Ihr Terminal oder Ihre Eingabeaufforderung.
+Navigieren Sie zu dem Verzeichnis, in dem Sie das Projekt speichern möchten.
+Klonen Sie das Repository von GitHub:
 
-    bash
-
-git clone https://github.com/IhrRepository/chatbot-basissystem.git
+    git clone https://github.com/IhrRepository/chatbot-basissystem.git
 
 Navigieren Sie in das geklonte Verzeichnis:
-
-bash
 
     cd chatbot-basissystem
 
 ### Projekt in der IDE öffnen
 
-    Öffnen Sie Ihre IDE (z.B. IntelliJ IDEA).
-    Wählen Sie "Projekt öffnen" oder "Ordner öffnen" (je nach IDE).
-    Navigieren Sie zum geklonten Verzeichnis und wählen Sie es aus.
-    Die IDE sollte das Projekt und seine Struktur automatisch erkennen.
+Öffnen Sie Ihre IDE (z.B. IntelliJ IDEA).
+Wählen Sie "Projekt öffnen" oder "Ordner öffnen" (je nach IDE).
+Navigieren Sie zum geklonten Verzeichnis und wählen Sie es aus.
+Die IDE sollte das Projekt und seine Struktur automatisch erkennen.
 
 ### Bibliotheken einbinden
 
-    Manuelles Hinzufügen:
-        Kopieren Sie die .jar-Dateien (json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, okio-2.10.0.jar) in das libs-Verzeichnis Ihres Projekts (falls noch kein libs-Verzeichnis vorhanden ist, erstellen Sie es).
-        Fügen Sie die .jar-Dateien zum Projekt in Ihrer IDE hinzu:
-            In IntelliJ IDEA: Klicken Sie mit der rechten Maustaste auf das Projekt > "Moduleinstellungen" > "Bibliotheken" > "Hinzufügen" > Wählen Sie die .jar-Dateien aus.
-            In Visual Studio Code: Verwenden Sie eine Build-Datei wie pom.xml (Maven) oder build.gradle (Gradle) und fügen Sie die entsprechenden Abhängigkeiten hinzu.
-
-    Maven/Gradle (optional):
-        Falls Sie Maven oder Gradle verwenden, fügen Sie die Bibliotheken als Abhängigkeiten in Ihre pom.xml (Maven) oder build.gradle (Gradle) Datei hinzu.
+#### Manuelles Hinzufügen:
+Kopieren Sie die .jar-Dateien (json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, okio-2.10.0.jar) in das libs-Verzeichnis Ihres Projekts (falls noch kein libs-Verzeichnis vorhanden ist, erstellen Sie es).
+#### Fügen Sie die .jar-Dateien zum Projekt in Ihrer IDE hinzu:
+#### In IntelliJ IDEA: 
+Klicken Sie mit der rechten Maustaste auf das Projekt > "Moduleinstellungen" > "Bibliotheken" > "Hinzufügen" > Wählen Sie die .jar-Dateien aus.
+In Visual Studio Code: Verwenden Sie eine Build-Datei wie pom.xml (Maven) oder build.gradle (Gradle) und fügen Sie die entsprechenden Abhängigkeiten hinzu.
 
 ### Projekt bauen und ausführen
 
-    Stellen Sie sicher, dass alle Abhängigkeiten korrekt eingebunden sind.
-    Bauen Sie das Projekt in der IDE:
-        In IntelliJ IDEA: Klicken Sie auf "Build" > "Build Project".
-        In Visual Studio Code: Verwenden Sie das integrierte Terminal oder Tasks, um das Projekt zu bauen.
-    Führen Sie das Hauptprogramm aus:
-        In IntelliJ IDEA: Rechtsklick auf App.java > "Run 'App.main()'".
-        In Visual Studio Code: Verwenden Sie den "Run"-Button oder konfigurieren Sie eine launch.json.
+Stellen Sie sicher, dass alle Abhängigkeiten korrekt eingebunden sind.
+#### Bauen Sie das Projekt in der IDE:
+##### In IntelliJ IDEA: 
+Klicken Sie auf "Build" > "Build Project".
+##### In Visual Studio Code: 
+Verwenden Sie das integrierte Terminal oder Tasks, um das Projekt zu bauen.
+#### Führen Sie das Hauptprogramm aus:
+##### In IntelliJ IDEA: 
+Rechtsklick auf App.java > "Run 'App.main()'".
+##### In Visual Studio Code: 
+Verwenden Sie den "Run"-Button oder konfigurieren Sie eine launch.json.
 
 ## Überprüfung
 
-    Tests durchführen: Führen Sie Unit-Tests durch, um sicherzustellen, dass das System wie erwartet funktioniert.
-    Verbindungstests: Stellen Sie sicher, dass die Anwendung erfolgreich mit den externen REST-APIs kommunizieren kann.
+#### Tests durchführen: 
+Führen Sie Unit-Tests durch, um sicherzustellen, dass das System wie erwartet funktioniert.
+#### Verbindungstests: 
+Stellen Sie sicher, dass die Anwendung erfolgreich mit den externen REST-APIs kommunizieren kann.
 
 ## Fehlerbehebung
 
-    Fehlende Abhängigkeiten: Überprüfen Sie, ob alle .jar-Dateien korrekt eingebunden wurden.
-    Netzwerkprobleme: Stellen Sie sicher, dass Ihre Internetverbindung stabil ist, um auf die REST-APIs zuzugreifen.
-    IDE-Probleme: Stellen Sie sicher, dass Ihre IDE korrekt eingerichtet ist, und dass das JDK richtig konfiguriert ist.
+#### Fehlende Abhängigkeiten: 
+Überprüfen Sie, ob alle .jar-Dateien korrekt eingebunden wurden.
+#### Netzwerkprobleme: 
+Stellen Sie sicher, dass Ihre Internetverbindung stabil ist, um auf die REST-APIs zuzugreifen.
+#### IDE-Probleme: 
+Stellen Sie sicher, dass Ihre IDE korrekt eingerichtet ist, und dass das JDK richtig konfiguriert ist.
