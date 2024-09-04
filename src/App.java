@@ -3,7 +3,6 @@ import model.DatabaseManager;
 import Interfaces.IDatabase;
 import model.User;
 import persistence.DatabaseAdapter;
-import persistence.SupabaseDatabase;
 import view.ConsoleView;
 import view.FrontendAdapter;
 import Interfaces.IFrontend;
@@ -14,7 +13,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         // Initialisierung des DatabaseManagers
         IDatabase db = new DatabaseAdapter(new DatabaseManager());
-        
+
 
         // Benutzer anmelden
         @SuppressWarnings("resource")
