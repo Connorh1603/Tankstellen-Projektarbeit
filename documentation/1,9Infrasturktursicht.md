@@ -123,6 +123,68 @@ Schnittstelle zu einem Wettervorhersagedienst für das Aktuelle Wetter(REST API)
 Schnittstelle zu einem Wikipedia-API.
 ###### SupabaseService.java: 
 Spezifischer Service für den Datenbankzugriff über die Supabase-API.
+```mermaid
+classDiagram
+    class TranslationBot {
+      -TranslationService translationService
+      +TranslationBot(TranslationService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
+
+    class WeatherBot {
+      -WeatherForecastService weatherService
+      +WeatherBot(WeatherForecastService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
+
+    class WikiBot {
+      -WikiService wikiService
+      +WikiBot(WikiService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
+
+    class TranslationService {
+      +translate(String text, String targetLanguage): String
+    }
+
+    class CurrentWeatherService {
+      +getWeatherInfo(String location): String
+    }
+
+    class WeatherForecastService {
+        +getForecast(String location): String
+    }
+
+    class WikiService {
+        +search(String query): String
+    }
+    class Database {
+      -List~Message~ messages
+      +saveMessage(Message message)
+      +getMessageHistory(): List~Message~
+    }
+
+    class SupabaseService {
+      +saveToDatabase(Message message)
+      +fetchFromDatabase(): List~Message~
+    }
+    class RESTAPIs
+    style RESTAPIs fill:#f9f,stroke:#333,stroke-width:4px
+
+    SupabaseService <-- Database
+    TranslationBot --> TranslationService
+    WeatherBot --> WeatherForecastService
+    WeatherBot --> CurrentWeatherService
+    WikiBot --> WikiService
+    RESTAPIs .. TranslationService
+    RESTAPIs .. WeatherForecastService
+    RESTAPIs .. SupabaseService
+    RESTAPIs .. CurrentWeatherService
+    RESTAPIs .. WikiService
+```
 
 ### Datenhaltungsschicht (Data Access Layer)
 
