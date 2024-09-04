@@ -259,14 +259,14 @@ classDiagram
 graph TD
     subgraph "Lokale Maschine"
         direction TB
-        A[App] --> B[BotManager]
-        B --> C[ChatController]
+        A[App] --> C[ChatController]
+        C --> B[BotManager]
         A --> D[FrontendAdapter]
         D --> E[ConsoleView]
-        C --> F[TranslationBot]
-        C --> G[WeatherBot]
-        C --> H[WikiBot]
-        B --> I[DatabaseAdapter]
+        B --> F[TranslationBot]
+        B --> G[WeatherBot]
+        B --> H[WikiBot]
+        C --> I[DatabaseAdapter]
         I --> J[Database]
     end
 
@@ -285,5 +285,6 @@ graph TD
         M --> Q[Wikipedia API]
         N --> R[Supabase API]
     end
+
 
 ```
