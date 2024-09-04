@@ -179,11 +179,11 @@ classDiagram
     WeatherBot --> WeatherForecastService
     WeatherBot --> CurrentWeatherService
     WikiBot --> WikiService
-    RESTAPIs .. TranslationService
-    RESTAPIs .. WeatherForecastService
-    RESTAPIs .. SupabaseService
-    RESTAPIs .. CurrentWeatherService
-    RESTAPIs .. WikiService
+    TranslationService --> RESTAPIs
+    WeatherForecastService --> RESTAPIs
+    SupabaseService --> RESTAPIs
+    CurrentWeatherService --> RESTAPIs
+    WikiService --> RESTAPIs
 ```
 
 ### Datenhaltungsschicht (Data Access Layer)
