@@ -1,13 +1,10 @@
 import Controller.ChatController;
-import bots.TranslationBot;
-import bots.WeatherBot;
-import bots.WikiBot;
 import model.DatabaseManager;
+import model.User;
+import persistence.SupabaseDatabase;
 import view.ConsoleView;
 import view.FrontendAdapter;
-import Interfaces.*;
-import model.User;
-import persistence.SupabaseDatabase;  // Korrigiert den Importpfad für SupabaseDatabase
+import Interfaces.IFrontend;
 
 import java.util.Scanner;
 
@@ -40,14 +37,12 @@ public class App {
 
         // Initialisierung des Controllers mit dem DatabaseManager
         ChatController controller = new ChatController(dbManager);
-        
+
+        // Initialisierung und Registrierung der Bots
+        controller.initializeBots();
+
         // Chatverlauf laden und anzeigen
         controller.displayMessageHistory(dbManager.loadMessages(currentUser.getUsername(), 100));
-        
-        // Registrierung der verfügbaren Bots
-        controller.registerBot(1, new WeatherBot());
-        controller.registerBot(2, new WikiBot());
-        controller.registerBot(3, new TranslationBot());
 
         // Verwenden des FrontendAdapters (aktuell für die Konsole)
         IFrontend frontend = new FrontendAdapter(new ConsoleView());
