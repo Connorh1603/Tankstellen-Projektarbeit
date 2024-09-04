@@ -174,7 +174,7 @@ classDiagram
     class RESTAPIs
     style RESTAPIs fill:#f9f,stroke:#333,stroke-width:4px
 
-    Databas --> SupabaseService 
+    Database --> SupabaseService 
     TranslationBot --> TranslationService
     WeatherBot --> WeatherForecastService
     WeatherBot --> CurrentWeatherService
