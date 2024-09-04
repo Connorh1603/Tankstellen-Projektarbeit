@@ -44,7 +44,7 @@ Kümmert sich um die Befehle, die die Bots verwalten und sorgt für entlastung d
 ## Systemarchitektur
 
 Unten ist das UML-Komponentendiagramm, das die Hauptkomponenten unseres Chatbot-Systems zeigt:
-
+```mermaid
 classDiagram
     class App {
         -BotManager botManager
