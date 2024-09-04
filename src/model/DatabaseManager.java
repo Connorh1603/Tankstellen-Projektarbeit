@@ -1,7 +1,6 @@
 package model;
 
-import model.Message;
-import model.User;
+
 import persistence.SupabaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,10 @@ import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Interfaces.IDatabase;
+
 public class DatabaseManager {
-    private SupabaseDatabase database;
+    private IDatabase database;
 
     public void registerDatabase(SupabaseDatabase db) {
         this.database = db;

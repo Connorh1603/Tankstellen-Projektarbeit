@@ -20,6 +20,7 @@ public class App {
         dbManager.registerDatabase(new SupabaseDatabase());
 
         // Benutzer anmelden
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
         User currentUser = null;
 

@@ -8,8 +8,8 @@ import services.TranslationService;
  */
 public class TranslationBot implements IBot {
     private final String name = "TranslationBot"; // Name des Bots
-    private boolean isActiveConversation = false; // Zeigt an, ob der Bot aktiv ist und auf Eingaben wartet
-    private String targetLanguage = ""; // Ziel-Sprache für die Übersetzung
+    private boolean isActiveConversation = false; // Zeigt an, ob der Bot aktiv ist und auf Eingaben wartet |||WIRD BENÖTIGT?
+    private String targetLanguage = ""; // Ziel-Sprache für die Übersetzung ||| WIRD BENÖTIGT?
 
     private final TranslationService translationService = TranslationService.getInstance(); // Instanz des TranslationService
 
