@@ -253,4 +253,5 @@ classDiagram
     Datenhaltungsschicht --> Diensteschicht 
     Präsentationsschicht --> Anwendungsschicht
     Anwendungsschicht --> Datenhaltungsschicht
+    Präsentationsschicht --> Datenhaltungsschicht
 ```
