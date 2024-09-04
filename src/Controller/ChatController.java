@@ -1,6 +1,5 @@
 package Controller;
 
-import model.DatabaseManager;
 import model.Message;
 import model.BotManager;
 import registry.BotRegistry;
@@ -11,18 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import Interfaces.IBot;
+import Interfaces.IDatabase;
 
 public class ChatController {
 
     private BotManager botManager;
     private List<Message> messageHistory;
-    private DatabaseManager dbManager;
+    private IDatabase db;
     private BotRegistry botRegistry;
 
-    public ChatController(DatabaseManager dbManager) {
+    public ChatController(IDatabase db) {
         this.botManager = new BotManager();
         this.messageHistory = new ArrayList<>();
-        this.dbManager = dbManager;
+        this.db = db;
         this.botRegistry = new BotRegistry(botManager); // Initialisierung des BotRegistry
     }
 
@@ -45,7 +45,7 @@ public class ChatController {
     public void processInput(String input, String user) {
         // Speichere die Benutzereingabe als Nachricht
         Message userMessage = new Message(user, input, java.time.LocalDateTime.now());
-        int userMessageId = dbManager.saveMessage(userMessage, null);
+        int userMessageId = db.saveMessage(userMessage, null);
         userMessage.setId(userMessageId);
 
         Map<Integer, IBot> activeBots = botManager.getActiveBots();
@@ -59,7 +59,7 @@ public class ChatController {
             if (output != null && !output.trim().isEmpty()) {
                 // Speichere die Bot-Antwort als Nachricht
                 Message botMessage = new Message(bot.getName(), output, java.time.LocalDateTime.now());
-                int botMessageId = dbManager.saveMessage(botMessage, userMessage.getId());
+                int botMessageId = db.saveMessage(botMessage, userMessage.getId());
                 botMessage.setId(botMessageId);
                 messageHistory.add(botMessage);
 

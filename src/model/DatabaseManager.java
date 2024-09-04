@@ -1,10 +1,11 @@
 package model;
 
 
-import persistence.SupabaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.*;
+import persistence.SupabaseDatabase;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,12 +13,12 @@ import java.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Interfaces.IDatabase;
+
 
 public class DatabaseManager {
-    private IDatabase database;
+    private SupabaseDatabase database;
 
-    public void registerDatabase(IDatabase db) {
+    public void registerDatabase(SupabaseDatabase db) {
         this.database = db;
     }
 

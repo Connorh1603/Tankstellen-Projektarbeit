@@ -1,11 +1,14 @@
 package Interfaces;
 
-import okhttp3.OkHttpClient;
+import java.util.List;
+
+import model.Message;
+import model.User;
 
 
 
 public interface IDatabase {
-    String getDatabaseUrl() ;
-    String getApiKey() ;
-    OkHttpClient getClient() ;
+    User authenticateUser(String username, String password) ;
+    int saveMessage(Message message, Integer relatedMessageId);
+    List<Message> loadMessages(String username, int limit);
 }
