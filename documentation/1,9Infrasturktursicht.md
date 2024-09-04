@@ -255,3 +255,45 @@ classDiagram
     Anwendungsschicht --> Datenhaltungsschicht
     Präsentationsschicht --> Datenhaltungsschicht
 ```
+```mermaid
+deploymentDiagram
+    node "Lokale Maschine" {
+        node "Prozessor" {
+            component App {
+                BotManager --> ChatController
+                App --> BotManager
+                App --> FrontendAdapter
+            }
+            component ChatController {
+                ChatController --> TranslationBot
+                ChatController --> WeatherBot
+                ChatController --> WikiBot
+            }
+            component FrontendAdapter {
+                FrontendAdapter --> ConsoleView
+            }
+            component DatabaseAdapter {
+                DatabaseAdapter --> Database
+            }
+        }
+
+        node "Services" {
+            component TranslationService
+            component WeatherForecastService
+            component WikiService
+            component SupabaseService
+        }
+
+        node "Datenbank" {
+            component Database
+            component SupabaseDatabase
+        }
+    }
+
+    node "Externe REST APIs" {
+        TranslationService --> "Translation API"
+        WeatherForecastService --> "Weather API"
+        WikiService --> "Wikipedia API"
+        SupabaseService --> "Supabase API"
+    }
+```
