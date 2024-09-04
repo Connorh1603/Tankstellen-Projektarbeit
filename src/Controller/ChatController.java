@@ -1,8 +1,8 @@
 package Controller;
 
 import model.Message;
+import services.BotRegistryService;
 import model.BotManager;
-import registry.BotRegistry;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,13 +17,13 @@ public class ChatController {
     private BotManager botManager;
     private List<Message> messageHistory;
     private IDatabase db;
-    private BotRegistry botRegistry;
+    private BotRegistryService botRegistry;
 
     public ChatController(IDatabase db) {
         this.botManager = new BotManager();
         this.messageHistory = new ArrayList<>();
         this.db = db;
-        this.botRegistry = new BotRegistry(botManager); // Initialisierung des BotRegistry
+        this.botRegistry = new BotRegistryService(botManager); // Initialisierung des BotRegistry
     }
 
     public void initializeBots() {

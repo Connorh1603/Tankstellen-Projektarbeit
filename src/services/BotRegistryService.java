@@ -1,15 +1,15 @@
-package registry;
+package services;
 
 import java.util.Map;
 
 import Interfaces.IBot;
 import model.BotManager;
 
-public class BotRegistry {
+public class BotRegistryService {
 
     private BotManager botManager;
 
-    public BotRegistry(BotManager botManager) {
+    public BotRegistryService(BotManager botManager) {
         this.botManager = botManager;
     }
 
