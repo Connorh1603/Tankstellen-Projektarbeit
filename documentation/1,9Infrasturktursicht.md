@@ -198,7 +198,48 @@ Konkrete Implementierung der Datenbanklogik, hält die Nachrichten in einer loka
 Vermittelt zwischen der Anwendung und der konkreten Datenbankimplementierung (z. B. Supabase).
 ###### SupabaseService.java: 
 Service, der eine Verbindung zur Supabase-Datenbank herstellt.
+```mermaid
+classDiagram
+    class ChatController{
+      -BotManager botManager
+      +ChatController(BotManager botManager)
+      +processMessage(Message message): String
+    }
+    class App {
+      -BotManager botManager
+      -FrontendAdapter frontend
+      +main(String[] args)
+    }
 
+    class IDatabase {
+      <<interface>>
+      +saveMessage(Message message)
+      +getMessageHistory(): List~Message~
+    }
+
+    class Database {
+      -List~Message~ messages
+      +saveMessage(Message message)
+      +getMessageHistory(): List~Message~
+    }
+
+    class SupabaseService {
+      +saveToDatabase(Message message)
+      +fetchFromDatabase(): List~Message~
+    }
+    class DatabaseAdapter {
+      -IDatabase database
+      +DatabaseAdapter(IDatabase database)
+      +saveMessage(Message message)
+      +getMessageHistory(): List~Message~
+    }
+
+    ChatController --> DatabaseAdapter : uses
+    App --> DatabaseAdapter :uses
+    IDatabase <|-- DatabaseAdapter
+    DatabaseAdapter --> Database
+    Database --> SupabaseService
+```
 
 Unten ist das UML-Komponentendiagramm, das die Hauptkomponenten unseres Chatbot-Systems zeigt:
 ```mermaid
