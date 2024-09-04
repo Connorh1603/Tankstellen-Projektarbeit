@@ -3,59 +3,44 @@
 ## Kontextabgrenzung
 
 ### Fachlicher Kontext
-Der `TranslationBot` ist ein spezialisierter Bot innerhalb des Chatbot-Management-Systems, der für die Übersetzung von Texten in verschiedene Sprachen zuständig ist. Benutzer interagieren mit dem Bot durch Eingabe von Befehlen in der Form `@translatebot <Zielsprachen-Code> <Text>`. Der Bot verwendet die DeepL API, um die angeforderten Übersetzungen durchzuführen.
+Der `TranslationBot` ist ein spezialisierter Bot, der für die Übersetzung von Texten verantwortlich ist. Benutzer interagieren mit dem Bot, indem sie den Befehl `@translatebot <Zielsprachen-Code> <Text>` eingeben. Der Bot verwendet die DeepL API, um die Übersetzungen durchzuführen.
 
 ### Technischer Kontext
-Der `TranslationBot` arbeitet innerhalb des Chatbot-Frameworks und kommuniziert mit der DeepL API über den `TranslationService`. Er empfängt Benutzereingaben über den `ChatController`, verarbeitet diese und liefert die Übersetzung als Antwort zurück.
+Der `TranslationBot` arbeitet innerhalb des Chatbot-Frameworks und verwendet den `TranslationService` zur Kommunikation mit der DeepL API.
 
 ## Lösungsstrategie
 
-Die Lösungsstrategie des `TranslationBot` basiert auf der Analyse von Benutzereingaben, der korrekten Identifikation der Zielsprache und der Verwendung der DeepL API zur Durchführung der Übersetzung.
-
-- **Technologieentscheidungen:**
-    - **DeepL API:** Hochwertiger maschineller Übersetzungsdienst, der für präzise Übersetzungen in verschiedene Sprachen sorgt.
-    - **Singleton-Pattern:** Der `TranslationService` wird als Singleton implementiert, um sicherzustellen, dass nur eine Instanz des Services im gesamten System verwendet wird.
-
-- **Top-Level-Zerlegung:**
-    - **TranslationBot:** Übernimmt die Verarbeitung der Benutzereingaben und die Kommunikation mit dem `TranslationService`.
-    - **TranslationService:** Verwaltet die Kommunikation mit der DeepL API und führt die tatsächliche Übersetzung durch.
+Die grundlegenden Designentscheidungen:
+- **DeepL API:** Die API wird für maschinelle Übersetzungen verwendet.
+- **Singleton Pattern:** Der `TranslationService` wird als Singleton implementiert.
 
 ## Bausteinsicht
 
-**Baustein-Übersicht:**
-- **TranslationBot (Klasse):** Implementiert das `IBot` Interface. Enthält Methoden zur Verarbeitung von Benutzerbefehlen und zur Kommunikation mit dem `TranslationService`.
-- **TranslationService (Klasse):** Implementiert das Singleton-Pattern und enthält Methoden zur Kommunikation mit der DeepL API.
+### TranslationBot:
+- **getName():** Gibt den Namen des Bots zurück.
+- **processCommand(String command):** Verarbeitet den Übersetzungsbefehl.
 
-**Baustein-Details:**
-- **TranslationBot:**
-    - `getName()`: Liefert den Namen des Bots.
-    - `processCommand(String command)`: Verarbeitet den Übersetzungsbefehl und gibt das Ergebnis zurück.
-
-- **TranslationService:**
-    - `translate(String text, String targetLang)`: Führt die Übersetzung durch, indem eine Anfrage an die DeepL API gesendet wird.
+### TranslationService:
+- **translate(String text, String targetLang):** Führt die Übersetzung durch.
 
 ## Laufzeitsicht
 
-**Typischer Ablauf bei einer Übersetzungsanfrage:**
-1. Der Benutzer gibt den Befehl `@translatebot en Hallo` ein.
-2. Der `TranslationBot` empfängt den Befehl und analysiert ihn, um den Zielsprachen-Code `en` und den Text `Hallo` zu extrahieren.
-3. Der `TranslationBot` ruft die Methode `translate` des `TranslationService` auf und übergibt den Text und die Zielsprache.
-4. Der `TranslationService` sendet eine Anfrage an die DeepL API und erhält die Übersetzung zurück.
-5. Die übersetzte Nachricht wird vom `TranslationBot` formatiert und dem Benutzer zurückgegeben.
+### Typischer Ablauf:
+1. Der Benutzer gibt den Befehl ein.
+2. Der `TranslationBot` analysiert den Befehl und ruft den `TranslationService` auf.
+3. Der Text wird über die DeepL API übersetzt.
+4. Die Übersetzung wird dem Benutzer zurückgegeben.
 
-**Wichtige Szenarien:**
-- **Normale Übersetzung:** Erfolgreiche Übersetzung eines einfachen Textes.
-- **Fehlerhafte Eingabe:** Der Befehl enthält keinen gültigen Zielsprachen-Code oder Text, der Bot gibt eine Fehlermeldung zurück.
-- **API-Ausfall:** Die DeepL API ist nicht erreichbar, der Bot gibt eine entsprechende Fehlermeldung zurück.
+### Wichtige Szenarien:
+- **Normale Übersetzung:** Erfolgreiche Übersetzung eines Textes.
+- **Fehlerhafte Eingabe:** Unvollständige oder falsche Befehle werden mit einer Fehlermeldung beantwortet.
+- **API-Ausfall:** Gibt eine Fehlermeldung zurück, wenn die API nicht verfügbar ist.
 
 ## Schnittstellen
 
-### Externe Schnittstellen
-- **DeepL API:**
-    - *Eingabe:* Text und Zielsprachen-Code (z.B. `Hallo`, `en`).
-    - *Ausgabe:* Übersetzter Text (z.B. `Hello`).
-    - *Spezifikation:* HTTP POST-Request mit Authentifizierung über einen API-Key, Antwort in JSON-Format.
+### Externe Schnittstelle:
+- **DeepL API:** Übersetzt Text in verschiedene Sprachen.
 
-### Interne Schnittstellen
-- **IBot Interface:** Das `TranslationBot` implementiert das `IBot` Interface, welches die Methoden `getName()` und `processCommand(String command)` definiert.
-- **TranslationService:** Der `TranslationBot` nutzt die Methode `translate(String text, String targetLang)` des `TranslationService`, um die DeepL API aufzurufen.
+### Interne Schnittstellen:
+- **IBot Interface:** Implementiert die Methoden `getName()` und `processCommand(String command)`.
+- **TranslationService:** Bietet die Übersetzungsfunktionalität.
