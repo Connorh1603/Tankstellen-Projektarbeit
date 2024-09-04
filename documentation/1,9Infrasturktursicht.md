@@ -236,7 +236,7 @@ classDiagram
 
     ChatController --> DatabaseAdapter : uses
     App --> DatabaseAdapter :uses
-    IDatabase <|-- DatabaseAdapter
+    DatabaseAdapter --|> IDatabase
     DatabaseAdapter --> Database
     Database --> SupabaseService
 ```
