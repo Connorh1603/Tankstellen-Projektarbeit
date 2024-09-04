@@ -1,9 +1,9 @@
 # 1.9 Infrastruktursicht
 ## Technische Infrastruktur
 
-Unser Chatbot-System ist als lokale Anwendung konzipiert, die auf einem einzelnen Computer oder Server läuft. Die technische Infrastruktur ist daher relativ einfach und fokussiert sich auf die Interaktion mit externen Diensten über REST APIs.
+Unser Chatbot-System ist als lokale Anwendung konzipiert, die auf einem einzelnen Computer läuft. Die technische Infrastruktur ist daher relativ einfach und fokussiert sich auf die Interaktion mit externen Diensten über REST APIs.
 
-Lokale Anwendung: Die Hauptanwendung, bestehend aus den Java-Programmen und -Bibliotheken (einschließlich json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, und okio-2.10.0.jar), wird auf einem einzelnen Rechner oder Server ausgeführt.
+Lokale Anwendung: Die Hauptanwendung, bestehend aus den Java-Programmen und -Bibliotheken (einschließlich json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, und okio-2.10.0.jar), wird lokal auf einem einzelnen Rechner ausgeführt.
 
 ## Erweiterte Systemtopologie
 
@@ -44,7 +44,7 @@ classDiagram
         +getUserInput(): String
     }
 
-    App --> FrontendAdapter
+    App --> IFrontend
     FrontendAdapter <|-- IFrontend
     FrontendAdapter --> ConsoleView
 ```
@@ -64,7 +64,50 @@ Verantwortlich für die Verarbeitung von Nachrichten und das Weiterleiten an den
 ##### Manager:
 ###### BotManager.java:
 Verwalten der Registrierung und Auswahl von Chatbots.
+```mermaid
+classDiagram
+    class ChatController{
+      -BotManager botManager
+      +ChatController(BotManager botManager)
+      +processMessage(Message message): String
+    }
+    class BotManager {
+      -List~IBot~ bots
+      +registerBot(IBot bot)
+      +getBot(String name): IBot
+    }
+    class IBot {
+      <<interface>>
+      +processMessage(String message): String
+      +getName(): String
+    }
+    class TranslationBot {
+      -TranslationService translationService
+      +TranslationBot(TranslationService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
 
+    class WeatherBot {
+      -WeatherForecastService weatherService
+      +WeatherBot(WeatherForecastService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
+
+    class WikiBot {
+      -WikiService wikiService
+      +WikiBot(WikiService service)
+      +processMessage(String message): String
+      +getName(): String
+    }
+
+    ChatController --> BotManager
+    BotManager --> IBot
+    IBot <|.. TranslationBot
+    IBot <|.. WeatherBot
+    IBot <|.. WikiBot
+```
 ### Diensteschicht (Service Layer)
 
 #### Zweck:
