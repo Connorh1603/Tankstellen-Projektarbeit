@@ -256,44 +256,34 @@ classDiagram
     Präsentationsschicht --> Datenhaltungsschicht
 ```
 ```mermaid
-deploymentDiagram
-    node "Lokale Maschine" {
-        node "Prozessor" {
-            component App {
-                BotManager --> ChatController
-                App --> BotManager
-                App --> FrontendAdapter
-            }
-            component ChatController {
-                ChatController --> TranslationBot
-                ChatController --> WeatherBot
-                ChatController --> WikiBot
-            }
-            component FrontendAdapter {
-                FrontendAdapter --> ConsoleView
-            }
-            component DatabaseAdapter {
-                DatabaseAdapter --> Database
-            }
-        }
+graph TD
+    subgraph "Lokale Maschine"
+        direction TB
+        A[App] --> B[BotManager]
+        B --> C[ChatController]
+        A --> D[FrontendAdapter]
+        D --> E[ConsoleView]
+        C --> F[TranslationBot]
+        C --> G[WeatherBot]
+        C --> H[WikiBot]
+        B --> I[DatabaseAdapter]
+        I --> J[Database]
+    end
 
-        node "Services" {
-            component TranslationService
-            component WeatherForecastService
-            component WikiService
-            component SupabaseService
-        }
+    subgraph "Services"
+        direction TB
+        F --> K[TranslationService]
+        G --> L[WeatherForecastService]
+        H --> M[WikiService]
+        I --> N[SupabaseService]
+    end
 
-        node "Datenbank" {
-            component Database
-            component SupabaseDatabase
-        }
-    }
+    subgraph "Externe REST APIs"
+        direction TB
+        K --> O[Translation API]
+        L --> P[Weather API]
+        M --> Q[Wikipedia API]
+        N --> R[Supabase API]
+    end
 
-    node "Externe REST APIs" {
-        TranslationService --> "Translation API"
-        WeatherForecastService --> "Weather API"
-        WikiService --> "Wikipedia API"
-        SupabaseService --> "Supabase API"
-    }
 ```
