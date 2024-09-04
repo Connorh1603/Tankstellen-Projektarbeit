@@ -3,16 +3,16 @@ package persistence;
 import java.util.List;
 
 import Interfaces.IDatabase;
-import model.DatabaseManager;
 import model.Message;
 import model.User;
+import services.SupabaseService;
 
 public class DatabaseAdapter implements IDatabase {
-    private DatabaseManager database;
+    private Database database;
 
-    public DatabaseAdapter(DatabaseManager dbm){
+    public DatabaseAdapter(Database dbm){
         this.database=dbm;
-        database.registerDatabase(new SupabaseDatabase());
+        database.registerDatabase(new SupabaseService());
     }
 
 

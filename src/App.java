@@ -1,8 +1,8 @@
 import Controller.ChatController;
-import model.DatabaseManager;
 import Interfaces.IDatabase;
 import model.User;
 import persistence.DatabaseAdapter;
+import persistence.Database;
 import view.ConsoleView;
 import view.FrontendAdapter;
 import Interfaces.IFrontend;
@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
         // Initialisierung des DatabaseManagers
-        IDatabase db = new DatabaseAdapter(new DatabaseManager());
+        IDatabase db = new DatabaseAdapter(new Database());
 
 
         // Benutzer anmelden
