@@ -5,6 +5,8 @@ Unser Chatbot-System ist als lokale Anwendung konzipiert, die auf einem einzelne
 
 Lokale Anwendung: Die Hauptanwendung, bestehend aus den Java-Programmen und -Bibliotheken (einschließlich json-20240303.jar, kotlin-stdlib-2.0.20.jar, okhttp-4.9.3.jar, und okio-2.10.0.jar), wird lokal auf einem einzelnen Rechner ausgeführt.
 
+Die Nachrichten werden auf einer Datenbank gespeichert, die ebenfalls über eine REST API angesprochen wird.
+
 ## Erweiterte Systemtopologie
 
 ### Präsentationsschicht (Frontend Layer)
