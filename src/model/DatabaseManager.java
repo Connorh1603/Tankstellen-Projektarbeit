@@ -17,7 +17,7 @@ import Interfaces.IDatabase;
 public class DatabaseManager {
     private IDatabase database;
 
-    public void registerDatabase(SupabaseDatabase db) {
+    public void registerDatabase(IDatabase db) {
         this.database = db;
     }
 

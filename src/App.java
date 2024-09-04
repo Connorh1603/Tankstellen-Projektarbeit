@@ -40,10 +40,10 @@ public class App {
 
         // Initialisierung des Controllers mit dem DatabaseManager
         ChatController controller = new ChatController(dbManager);
-
+        
         // Chatverlauf laden und anzeigen
         controller.displayMessageHistory(dbManager.loadMessages(currentUser.getUsername(), 100));
-
+        
         // Registrierung der verfügbaren Bots
         controller.registerBot(1, new WeatherBot());
         controller.registerBot(2, new WikiBot());
