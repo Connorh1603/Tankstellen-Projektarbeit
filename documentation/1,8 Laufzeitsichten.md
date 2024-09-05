@@ -38,6 +38,24 @@ participant DeepL_API
 5. **API-Kommunikation:** Der `WeatherBot` nutzt die OpenWeatherMap API, um aktuelle Wetterdaten abzurufen.
 6. **Antwort:** Die Wetterdaten werden zurückgegeben und dem Benutzer ausgegeben.
 
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant ChatController
+    participant WeatherBot
+    participant ListChecker
+    participant OpenWeatherAPI
+
+    Benutzer->>ChatController: Fragt nach dem Wetter in einer Stadt
+    ChatController->>WeatherBot: Leitet die Anfrage weiter
+    WeatherBot->>ListChecker: Prüft die Stadt
+    ListChecker-->>WeatherBot: Stadtname wird zurückgegeben
+    WeatherBot->>OpenWeatherAPI: Holt aktuelle Wetterdaten für die Stadt
+    OpenWeatherAPI-->>WeatherBot: Liefert Wetterinformationen
+    WeatherBot-->>ChatController: Wetterdaten werden zurückgegeben
+    ChatController-->>Benutzer: Gibt die Wetterdaten aus
+```
+
 ### Szenario 3: Wikipedia-Abfrage an den WikiBot
 1. **Benutzerinteraktion:** Der Benutzer fragt nach Informationen zu einem Begriff.
 2. **Eingangsverarbeitung:** Der `ChatController` empfängt und speichert die Anfrage.
@@ -45,3 +63,18 @@ participant DeepL_API
 4. **Befehlsverarbeitung:** Der Bot extrahiert den Suchbegriff und ruft die Wikipedia API auf.
 5. **API-Kommunikation:** Der Bot holt die Daten von der API.
 6. **Antwort:** Die Informationen werden dem Benutzer zurückgegeben.
+
+```mermaid
+sequenceDiagram
+    participant Benutzer
+    participant ChatController
+    participant WikiBot
+    participant WikipediaAPI
+
+    Benutzer->>ChatController: Fragt nach Informationen zu einem Begriff
+    ChatController->>WikiBot: Leitet die Anfrage weiter
+    WikiBot->>WikipediaAPI: Sendet Suchbegriff an die Wikipedia API
+    WikipediaAPI-->>WikiBot: Liefert Wikipedia-Informationen
+    WikiBot-->>ChatController: Gibt die Informationen zurück
+    ChatController-->>Benutzer: Zeigt die Wikipedia-Informationen an
+```
