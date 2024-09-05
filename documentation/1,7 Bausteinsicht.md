@@ -37,7 +37,7 @@
 # Statische Struktur des Systems
 
 ## White-Boxen
-
+```mermaid
 classDiagram
     class View {
         <<White-Box>>
@@ -131,3 +131,5 @@ classDiagram
     App --> WeatherForecastService
     App --> WikiService
     App --> TranslationService
+
+```
