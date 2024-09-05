@@ -10,7 +10,7 @@ Das Verhalten des Systems zur Laufzeit kann durch folgende Szenarien beschrieben
 5. **API-Kommunikation:** Der `TranslationService` übersetzt den Text mithilfe der DeepL API.
 6. **Antwort:** Die Übersetzung wird zurückgegeben, gespeichert und an den Benutzer ausgegeben.
 
-```
+```mermaid
 sequenceDiagram
 participant User
 participant ChatController
