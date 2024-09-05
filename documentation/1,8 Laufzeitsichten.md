@@ -10,6 +10,26 @@ Das Verhalten des Systems zur Laufzeit kann durch folgende Szenarien beschrieben
 5. **API-Kommunikation:** Der `TranslationService` übersetzt den Text mithilfe der DeepL API.
 6. **Antwort:** Die Übersetzung wird zurückgegeben, gespeichert und an den Benutzer ausgegeben.
 
+```
+sequenceDiagram
+participant User
+participant ChatController
+participant BotManager
+participant TranslationBot
+participant TranslationService
+participant DeepL_API
+
+    User->>ChatController: Eingabe "@translatebot en Hallo"
+    ChatController->>BotManager: Aktivierte Bots abrufen
+    BotManager->>TranslationBot: Aufruf processCommand("@translatebot en Hallo")
+    TranslationBot->>TranslationService: Aufruf translate("Hallo", "EN")
+    TranslationService->>DeepL_API: Anfrage zur Übersetzung (POST)
+    DeepL_API-->>TranslationService: Übersetzter Text "Hello"
+    TranslationService-->>TranslationBot: Übersetzter Text "Hello"
+    TranslationBot-->>ChatController: Ausgabe "Translation: Hello"
+    ChatController-->>User: Ausgabe "Translation: Hello"
+```
+
 ### Szenario 2: Wetteranfrage an den WeatherBot
 1. **Benutzerinteraktion:** Der Benutzer fragt nach dem Wetter in einer Stadt.
 2. **Eingangsverarbeitung:** Der `ChatController` empfängt und speichert die Eingabe.
