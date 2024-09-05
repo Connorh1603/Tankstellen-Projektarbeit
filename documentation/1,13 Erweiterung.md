@@ -52,23 +52,23 @@ Das System unterstützt die Erweiterung durch neue Chatbots. Diese Erweiterung e
 ```
 ### 3. Konfiguration des Frontends**
 
-**Sicherstellen, dass das Frontend in der Lage ist, den neuen Bot zu nutzen.**
-    **Gegebenenfalls die Benutzeroberfläche oder das Frontend-Handling anpassen, um den neuen Bot korrekt darzustellen.**
+- Sicherstellen, dass das Frontend in der Lage ist, den neuen Bot zu nutzen.
+    - Gegebenenfalls die Benutzeroberfläche oder das Frontend-Handling anpassen, um den neuen Bot korrekt darzustellen.
 
 ### 4. Testen des neuen Chatbots**
 
-**Die Integration des neuen Bots testen.**
-    **Sicherstellen, dass der Bot ordnungsgemäß funktioniert und die gewünschten Antworten liefert.**
+- Die Integration des neuen Bots testen.
+   - Sicherstellen, dass der Bot ordnungsgemäß funktioniert und die gewünschten Antworten liefert.
 
-**Tests durchführen, um sicherzustellen, dass keine bestehenden Funktionen beeinträchtigt sind.**
+Tests durchführen, um sicherzustellen, dass keine bestehenden Funktionen beeinträchtigt sind.
 
 ### 5. Dokumentation und Bereitstellung**
 
-**Die Funktionalität und Konfiguration des neuen Bots dokumentieren.**
-    **Informationen über den neuen Bot in der Systemdokumentation hinzufügen.**
+- Die Funktionalität und Konfiguration des neuen Bots dokumentieren.
+   - Informationen über den neuen Bot in der Systemdokumentation hinzufügen.
 
-**Die Bereitstellung des aktualisierten Systems vorbereiten.**
-    **Eine neue Version der Software erstellen, die den neuen Bot enthält.**
+- Die Bereitstellung des aktualisierten Systems vorbereiten.
+   - Eine neue Version der Software erstellen, die den neuen Bot enthält.
 
 ## 3. Beispiele für einen neuen Chatbot
 
