@@ -30,7 +30,7 @@
 - **Diensteschicht**: `CurrentWeatherService`, `WeatherForecastService`, `WikiService`, und `TranslationService` integrieren externe APIs für zusätzliche Funktionen.
 
 ### Motivation:
-- Die Schichtenarchitektur ermöglicht eine klare Trennung der Verantwortlichkeiten, was die Wartung und Erweiterung des Systems erleichtert. Jede Schicht ist unabhängig und kann separat angepasst werden.
+- Die Schichtenarchitektur ermöglicht eine klare Trennung der Verantwortlichkeiten, was die Wartung und Erweiterung des Systems erleichtert. Jede - - Schicht ist unabhängig und kann separat angepasst werden.
 
 ## 3. Technologiestack und Integration
 
