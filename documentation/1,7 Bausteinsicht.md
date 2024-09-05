@@ -39,17 +39,58 @@
 ## White-Boxen
 ```mermaid
 classDiagram
-    class View {
-        <<White-Box>>
+    %% Black-Boxen
+    class App {
+        <<Black-Box>>
+        -ChatController controller
+        -IFrontend frontend
+        +main(String[] args)
     }
 
+    class ChatController {
+        <<Black-Box>>
+        +initializeBots()
+        +listAvailableBots()
+        +activateBot(int botId)
+        +deactivateBot(int botId)
+        +processInput(String input, String user)
+        +displayMessageHistory(List<Message> messages)
+    }
+
+    class BotManager {
+        <<Black-Box>>
+        +registerBot(int id, IBot bot)
+        +activateBot(int id)
+        +deactivateBot(int id)
+        +getBot(int id): IBot
+        +getActiveBots(): Map<Integer, IBot>
+        +getAvailableBots(): Map<Integer, IBot>
+    }
+
+    class IDatabase {
+        <<Black-Box>>
+        +authenticateUser(String username, String password): User
+        +saveMessage(Message message, Integer relatedMessageId): int
+        +loadMessages(String username, int limit): List<Message>
+    }
+
+    class IBot {
+        <<Black-Box>>
+        +getName(): String
+        +processCommand(String command): String
+    }
+
+    %% White-Boxen
     class ConsoleView {
+        <<White-Box>>
         +display(String message)
         +readInput(): String
         +run(ChatController controller, String user)
         +displayMessageHistory(List<Message> messageHistory)
     }
+
     class FrontendAdapter {
+        <<White-Box>>
         -ConsoleView consoleView
         +FrontendAdapter(ConsoleView consoleView)
         +start(ChatController controller, String user)
@@ -58,78 +99,57 @@ classDiagram
         +displayMessageHistory(List<Message> messageHistory)
     }
 
-    class Controller {
+    class TranslationBot {
         <<White-Box>>
-    }
-    class ChatController {
-        -IDatabase db
-        +initializeBots()
-        +processInput(String command, String user)
-        +listAvailableBots()
-        +activateBot(int botId)
-        +deactivateBot(int botId)
-        +displayMessageHistory(List<Message> messageHistory)
+        +getName(): String
+        +processCommand(String command): String
     }
 
-    class Persistence {
+    class WeatherBot {
         <<White-Box>>
+        +getName(): String
+        +processCommand(String command): String
     }
-    class Database {
-        +authenticateUser(String username, String password): User
-        +loadMessages(String username, int limit): List<Message>
+
+    class WikiBot {
+        <<White-Box>>
+        +getName(): String
+        +processCommand(String command): String
     }
+
     class DatabaseAdapter {
+        <<White-Box>>
         -Database database
         +DatabaseAdapter(Database database)
         +authenticateUser(String username, String password): User
+        +saveMessage(Message message, Integer relatedMessageId): int
         +loadMessages(String username, int limit): List<Message>
     }
 
-    class Services {
+    class SupabaseService {
         <<White-Box>>
-    }
-    class CurrentWeatherService {
-        +getWeatherInfo(String city): String
-    }
-    class WeatherForecastService {
-        +getForecastInfo(String city): String
-    }
-    class WikiService {
-        +fetchWikiSummary(String searchTerm): String
-    }
-    class TranslationService {
-        +translate(String text, String targetLang): String
+        +getDatabaseUrl(): String
+        +getApiKey(): String
+        +getClient(): OkHttpClient
     }
 
-    class Root {
-        <<Black-Box>>
-    }
-    class App {
-        -ChatController controller
-        -IFrontend frontend
-        +main(String[] args)
-    }
-
-    View --> FrontendAdapter
-    FrontendAdapter --> ConsoleView
-
-    Controller --> ChatController
-
-    Persistence --> Database
-    Persistence --> DatabaseAdapter
-
-    Services --> CurrentWeatherService
-    Services --> WeatherForecastService
-    Services --> WikiService
-    Services --> TranslationService
-
+    %% Beziehungen
     App --> ChatController
     App --> FrontendAdapter
-    App --> Database
     App --> DatabaseAdapter
-    App --> CurrentWeatherService
-    App --> WeatherForecastService
-    App --> WikiService
-    App --> TranslationService
+    App --> SupabaseService
+    App --> TranslationBot
+    App --> WeatherBot
+    App --> WikiBot
 
+    ChatController --> BotManager
+    ChatController --> IDatabase
+    BotManager --> IBot
+    IBot <|-- TranslationBot
+    IBot <|-- WeatherBot
+    IBot <|-- WikiBot
+    IDatabase <|-- DatabaseAdapter
+    DatabaseAdapter --> SupabaseService
+    FrontendAdapter --> ConsoleView
+    
 ```
