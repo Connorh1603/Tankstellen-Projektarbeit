@@ -36,7 +36,6 @@
 
 # Statische Struktur des Systems
 
-## White-Boxen
 ```mermaid
 classDiagram
     %% Black-Boxen
@@ -151,5 +150,5 @@ classDiagram
     IDatabase <|-- DatabaseAdapter
     DatabaseAdapter --> SupabaseService
     FrontendAdapter --> ConsoleView
-    
+
 ```
