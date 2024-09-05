@@ -43,9 +43,9 @@ Erhöhte Wartungskosten und Schwierigkeiten bei der Integration neuer Features o
 #### Mitigation: 
 Refactoring der Adapter, um sie generischer und modularer zu gestalten, damit sie in verschiedenen Kontexten wiederverwendet werden können.
 
-### Fehlende Unit-Tests und Automatisierung
+### Fehlende Unit-Tests 
 #### Problem: 
-Es ist unklar, ob umfassende Unit-Tests für die verschiedenen Komponenten vorhanden sind. Das Fehlen solcher Tests kann zu unerwarteten Fehlern bei Änderungen führen.
+Wir haben unseren Code ausgiebig getestet aber keine Tests nach "Hanbuch durchgeführt".
 #### Risiko: 
 Fehler können in den Produktionscode gelangen, was zu erhöhter Fehleranfälligkeit und längeren Entwicklungszeiten führt.
 #### Mitigation: 
@@ -60,14 +60,6 @@ Verstöße gegen das SRP können zu schwer wartbarem Code führen, da eine Ände
 #### Mitigation: 
 Aufteilung der Verantwortlichkeiten auf kleinere, spezialisierte Klassen.
 
-### Open/Closed Principle (OCP)
-#### Problem: 
-Die Erweiterung des Systems durch neue Bots oder Services könnte erfordern, dass bestehende Klassen geändert werden müssen.
-#### Risiko: 
-Solche Änderungen brechen das OCP und führen dazu, dass Änderungen in einer Komponente möglicherweise unvorhergesehene Auswirkungen auf andere Komponenten haben.
-#### Mitigation: 
-Verwendung von Entwurfsmustern wie Factory oder Strategy, um das System besser erweiterbar zu machen, ohne bestehende Codebasis zu verändern.
-
 ### DRY (Don't Repeat Yourself)
 #### Problem: 
 Falls Code-Duplizierungen auftreten, beispielsweise bei der Implementierung ähnlicher Logiken in verschiedenen Bots oder Services, wird das DRY-Prinzip verletzt.
@@ -75,12 +67,3 @@ Falls Code-Duplizierungen auftreten, beispielsweise bei der Implementierung ähn
 Dies führt zu einem erhöhten Wartungsaufwand, da Änderungen an einem Teil des Codes in mehreren Bereichen vorgenommen werden müssen.
 #### Mitigation: 
 Refactoring des Codes, um wiederverwendbare Komponenten und Methoden zu extrahieren, die in verschiedenen Teilen des Systems genutzt werden können.
-
-## Schwächen, über die sich Entwicklungsteams beklagen könnten
-
-#### Komplexität der Wartung: 
-Aufgrund der engen Kopplung und der mangelnden Modularität könnte das Entwicklungsteam Schwierigkeiten haben, das System zu warten und neue Features hinzuzufügen, ohne bestehende Funktionalitäten zu beeinträchtigen.
-#### Fehlende Dokumentation: 
-Wenn die interne Dokumentation der Architektur und des Codes fehlt oder unvollständig ist, wird es für neue Teammitglieder schwierig, sich in das System einzuarbeiten.
-#### Langsame Entwicklungsgeschwindigkeit: 
-Die Notwendigkeit, viele Komponenten gleichzeitig zu ändern, könnte zu einer Verlangsamung der Entwicklungsgeschwindigkeit führen, insbesondere wenn keine automatisierten Tests vorhanden sind.
