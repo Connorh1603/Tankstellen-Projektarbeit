@@ -27,19 +27,19 @@ public class ChatController {
     }
 
     public void initializeBots() {
-        botRegistry.registerBots(); // Registrierung der Bots über BotRegistry
+        botRegistry.registerBots(); 
     }
 
     public void listAvailableBots() {
-        botRegistry.listAvailableBots(); // Aufruf der BotRegistry Methode
+        botRegistry.listAvailableBots(); 
     }
 
     public void activateBot(int botId) {
-        botRegistry.activateBot(botId); // Aufruf der BotRegistry Methode
+        botRegistry.activateBot(botId); 
     }
 
     public void deactivateBot(int botId) {
-        botRegistry.deactivateBot(botId); // Aufruf der BotRegistry Methode
+        botRegistry.deactivateBot(botId); 
     }
     
     public void processInput(String input, String user) {
