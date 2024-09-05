@@ -1,7 +1,5 @@
 ## 1.7 Bausteinschicht
 
-## 1.7 Bausteinschicht
-
 ## White-Boxen
 
 ### View-Verzeichnis (White-Box)
@@ -47,12 +45,14 @@ classDiagram
         <<White-Box>>
     }
     class ConsoleView {
+        <<White-Box>>
         +display(String message)
         +readInput(): String
         +run(ChatController controller, String user)
         +displayMessageHistory(List<Message> messageHistory)
     }
     class FrontendAdapter {
+        <<White-Box>>
         -ConsoleView consoleView
         +FrontendAdapter(ConsoleView consoleView)
         +start(ChatController controller, String user)
@@ -65,6 +65,7 @@ classDiagram
         <<White-Box>>
     }
     class ChatController {
+        <<White-Box>>
         -IDatabase db
         +initializeBots()
         +processInput(String command, String user)
@@ -78,16 +79,19 @@ classDiagram
         <<White-Box>>
     }
     class Database {
+        <<White-Box>>
         +authenticateUser(String username, String password): User
         +loadMessages(String username, int limit): List<Message>
     }
     class DatabaseAdapter {
+        <<White-Box>>
         -Database database
         +DatabaseAdapter(Database database)
         +authenticateUser(String username, String password): User
         +loadMessages(String username, int limit): List<Message>
     }
     class SupabaseService {
+        <<White-Box>>
         +getDatabaseUrl(): String
         +getApiKey(): String
         +getClient(): OkHttpClient
@@ -97,15 +101,19 @@ classDiagram
         <<White-Box>>
     }
     class CurrentWeatherService {
+        <<White-Box>>
         +getWeatherInfo(String city): String
     }
     class WeatherForecastService {
+        <<White-Box>>
         +getForecastInfo(String city): String
     }
     class WikiService {
+        <<White-Box>>
         +fetchWikiSummary(String searchTerm): String
     }
     class TranslationService {
+        <<White-Box>>
         +translate(String text, String targetLang): String
     }
     
@@ -114,11 +122,13 @@ classDiagram
         <<Black-Box>>
     }
     class App {
+        <<Black-Box>>
         -ChatController controller
         -IFrontend frontend
         +main(String[] args)
     }
     class BotManager {
+        <<Black-Box>>
         +registerBot(int id, IBot bot)
         +activateBot(int id)
         +deactivateBot(int id)
@@ -127,11 +137,13 @@ classDiagram
         +getAvailableBots(): Map<Integer, IBot>
     }
     class IDatabase {
+        <<Black-Box>>
         +authenticateUser(String username, String password): User
         +saveMessage(Message message, Integer relatedMessageId): int
         +loadMessages(String username, int limit): List<Message>
     }
     class IBot {
+        <<Black-Box>>
         +getName(): String
         +processCommand(String command): String
     }
