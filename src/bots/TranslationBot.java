@@ -3,14 +3,19 @@ package bots;
 import Interfaces.IBot;
 import services.TranslationService;
 
+// Die Klasse TranslationBot implementiert das IBot-Interface 
 public class TranslationBot implements IBot {
+
+    // Instanzvariable 
     private final TranslationService translationService = TranslationService.getInstance();
 
+    // Implementierung der Methode getName() 
     @Override
     public String getName() {
         return "TranslationBot";
     }
 
+    // Implementierung der Methode processCommand() 
     @Override
     public String processCommand(String command) {
         if (!command.toLowerCase().startsWith("@translatebot")) {

@@ -3,15 +3,19 @@ package bots;
 import Interfaces.IBot;
 import services.WikiService;
 
+// Die Klasse WikiBot implementiert das IBot-Interface 
 public class WikiBot implements IBot {
 
+    // Instanzvariable 
     private final WikiService wikiService = new WikiService();
 
+    // Implementierung der Methode getName()
     @Override
     public String getName() {
         return "WikiBot";
     }
 
+    // Implementierung der Methode processCommand() 
     @Override
     public String processCommand(String command) {
         if (command == null || !command.toLowerCase().contains("@wiki")) {
