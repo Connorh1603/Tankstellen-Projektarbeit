@@ -6,7 +6,7 @@ Für die Entwicklung des Chatbot-Systems haben wir uns für die Verwendung der P
 
 # Top-Level-Zerlegung des Systems
 
-Das System ist um einen zentralen ChatController herum aufgebaut, der als Hauptsteuereinheit dient. Dieser Controller interagiert mit BotManager und DatabaseManager, die wiederum die Bots und Datenverwaltung steuern. Die Systemarchitektur ist stark modular mit einer klaren Trennung von Verantwortlichkeiten durch die Verwendung von Interfaces wie IBot, IDatabase, und IFrontend, was die Wartbarkeit und Erweiterbarkeit verbessert.
+Das System ist um einen zentralen ChatController herum aufgebaut, der als Hauptsteuereinheit dient. Dieser Controller interagiert mit BotManager und der Datenbank, die wiederum die Bots steuern und Datenverwaltung übernehmen. Die Systemarchitektur ist stark modular mit einer klaren Trennung von Verantwortlichkeiten durch die Verwendung von Interfaces wie IBot, IDatabase, und IFrontend, was die Wartbarkeit und Erweiterbarkeit verbessert.
 
 # Entwurfs- und Architekturmuster
 
